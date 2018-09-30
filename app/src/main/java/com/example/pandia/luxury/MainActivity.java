@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ImageButton mAddButton;
+    private ImageButton mViewButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
         mAddButton = findViewById(R.id.MainActivity_AddButton);
         mAddButton.setOnClickListener((View v) -> {
             Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
+            MainActivity.this.startActivity(intent);
+        });
+
+        mViewButton = findViewById(R.id.MainActivity_ViewButton);
+        mViewButton.setOnClickListener((View v) -> {
+            Intent intent = new Intent(MainActivity.this, QRCodeEncodeActivity.class);
             MainActivity.this.startActivity(intent);
         });
     }
