@@ -1,7 +1,10 @@
 package com.example.pandia.luxury;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -11,13 +14,17 @@ public class MainActivity extends AppCompatActivity {
         System.loadLibrary("native-lib");
     }
 
+    private ImageButton mAddButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Example of a call to a native method
-
+        mAddButton = findViewById(R.id.MainActivity_AddButton);
+        mAddButton.setOnClickListener((View v) -> {
+            Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
+            MainActivity.this.startActivity(intent);
+        });
     }
 
     /**
