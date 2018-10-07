@@ -36,6 +36,7 @@ public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<Luxury
     public LuxuryItem readEntry(long i) {
         //TODO: Query too much for boundary
         if (isInBound(i)) {
+            //TODO: i is not ID, this is bug here
             return mItemDAO.getLuxuryItem(i);
         }
         return null;
@@ -53,8 +54,12 @@ public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<Luxury
 
     @Override
     public void writeEntry(LuxuryItem entry) {
-        //TODO: how about update data
-        mItemDAO.insertLuxuryItem(entry);
+        if (mItemDAO.isLuxuryItemExists(entry.getUniqueID())) {
+            mItemDAO.updateLuxuryItem(entry);
+        }
+        else {
+            mItemDAO.insertLuxuryItem(entry);
+        }
     }
 
     @Override

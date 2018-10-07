@@ -35,6 +35,7 @@ public class BorrowItemSQLiteIO implements Writable<BorrowItem>, Readable<Borrow
     public BorrowItem readEntry(long i) {
         //TODO: Query too much for boundary
         if (isInBound(i)) {
+            //TODO: i is not ID, this is bug here
             return mItemDAO.getBorrowItem(i);
         }
         return null;
@@ -52,8 +53,12 @@ public class BorrowItemSQLiteIO implements Writable<BorrowItem>, Readable<Borrow
 
     @Override
     public void writeEntry(BorrowItem entry) {
-        //TODO: how about update data
-        mItemDAO.insertBorrowItem(entry);
+        if (mItemDAO.isBorrowItemExists(entry.getUniqueID())) {
+            mItemDAO.updateBorrowItem(entry);
+        }
+        else {
+            mItemDAO.insertBorrowItem(entry);
+        }
     }
 
     @Override

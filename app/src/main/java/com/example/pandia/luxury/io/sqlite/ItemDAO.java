@@ -162,8 +162,19 @@ public class ItemDAO {
         if (cursor.moveToNext()) {
             result = cursor.getLong(0);
         }
-
+        cursor.close();
         return result;
+    }
+
+    public boolean isLuxuryItemExists(String uniqueID) {
+        String where = UNIQUE_ID + "=" + uniqueID;
+        Cursor result = mDB.query(
+                LUXURYITEM_TABLE_NAME, null, where, null,
+                null, null, null, null);
+
+        boolean exist = result.moveToFirst();
+        result.close();
+        return exist;
     }
 
     public BorrowItem insertBorrowItem(BorrowItem item) {
@@ -262,8 +273,19 @@ public class ItemDAO {
         if (cursor.moveToNext()) {
             result = cursor.getLong(0);
         }
-
+        cursor.close();
         return result;
+    }
+
+    public boolean isBorrowItemExists(String uniqueID) {
+        String where = UNIQUE_ID + "=" + uniqueID;
+        Cursor result = mDB.query(
+                BORROWITEM_TABLE_NAME, null, where, null,
+                null, null, null, null);
+
+        boolean exist = result.moveToFirst();
+        result.close();
+        return exist;
     }
 
     public void genFakeLuxuryItemData() {
