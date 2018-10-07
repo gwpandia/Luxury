@@ -10,36 +10,22 @@ import java.util.TreeMap;
 
 public class LuxuryItem {
 
-    enum LuxuryType {
-        OTHER_TYPE,
-        MODEL,
-        LEGO,
-        BOOK,
-        GAME_CONSOLE,
-        GAME_ACCESSORY,
-        GAME,
-        EARPHONE,
-        COMPUTER,
-        PHONE,
-        CAMERA,
-        LENS
-    }
-
     public String mUniqueID;
     public String mItemName;
     public int mPrice;
     public Date mPurchasedDate;
     public Image mItemImage;
-    public LuxuryType mItemType;
+    public LuxuryItemConstants.LuxuryType mItemType;
     public TreeMap<String, String> mExtraData;
 
     public LuxuryItem(String itemName) {
         mItemName = itemName;
-        mUniqueID = ItemUtil.GenerateItemUniqueID(itemName);
         mPrice = LuxuryItemConstants.ITEM_DEFAULT_PRICE;
         mPurchasedDate = new Date();
         mItemImage = null;
-        mItemType = LuxuryType.OTHER_TYPE;
+        mItemType = LuxuryItemConstants.LuxuryType.OTHER_TYPE;
+
+        mUniqueID = ItemUtil.GenerateItemUniqueID(itemName, mItemType);
 
         mExtraData = new TreeMap<String, String>();
     }
@@ -54,7 +40,7 @@ public class LuxuryItem {
 
     public void setItemName(String itemName) {
         this.mItemName = itemName;
-        mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName);
+        mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
     }
 
     public int getPrice() {
@@ -83,12 +69,13 @@ public class LuxuryItem {
         this.mItemImage = itemImage;
     }
 
-    public LuxuryType getmItemType() {
+    public LuxuryItemConstants.LuxuryType getmItemType() {
         return mItemType;
     }
 
-    public void setmItemType(LuxuryType mItemType) {
-        this.mItemType = mItemType;
+    public void setmItemType(LuxuryItemConstants.LuxuryType itemType) {
+        this.mItemType = itemType;
+        mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
     }
 
     public void addExtraData(String key, String value) {

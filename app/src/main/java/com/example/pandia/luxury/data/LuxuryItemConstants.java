@@ -1,5 +1,9 @@
 package com.example.pandia.luxury.data;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class LuxuryItemConstants {
 
     public static final String LEGO_SUBCATEGORY_KEY = "##$$LEGO_SUBCAT";
@@ -84,4 +88,38 @@ public class LuxuryItemConstants {
 
     public static final int ITEM_DEFAULT_PRICE = 0;
     public static final String ITEM_DEFAULT_EXTRA_VALUE = "EMPTY_EXTRA";
+
+    public enum LuxuryType {
+        OTHER_TYPE,
+        MODEL,
+        LEGO,
+        BOOK,
+        GAME_CONSOLE,
+        GAME_ACCESSORY,
+        GAME,
+        EARPHONE,
+        COMPUTER,
+        PHONE,
+        CAMERA,
+        LENS
+    }
+
+    public static final Map<LuxuryType, String> LUXURY_TYPE_DISPLAY_NAME;
+
+    static {
+        Map <LuxuryType, String> map = new HashMap<LuxuryType, String>();
+        map.put(LuxuryType.OTHER_TYPE, "OTHER");
+        map.put(LuxuryType.MODEL, "MODEL");
+        map.put(LuxuryType.LEGO, "LEGO");
+        map.put(LuxuryType.BOOK, "BOOK");
+        map.put(LuxuryType.GAME_CONSOLE, "GAME_CONSOLE");
+        map.put(LuxuryType.GAME_ACCESSORY, "GAME_ACCESSORY");
+        map.put(LuxuryType.GAME, "GAME");
+        map.put(LuxuryType.EARPHONE, "EARPHONE");
+        map.put(LuxuryType.COMPUTER, "COMPUTER");
+        map.put(LuxuryType.PHONE, "PHONE");
+        map.put(LuxuryType.CAMERA, "CAMERA");
+        map.put(LuxuryType.LENS, "LENS");
+        LUXURY_TYPE_DISPLAY_NAME = Collections.unmodifiableMap(map);
+    };
 }
