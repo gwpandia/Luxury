@@ -7,8 +7,8 @@ public class LuxuryUser {
     public String mUserCredential;
 
     public LuxuryUser(String userID, String userCredential) {
-        mUserID = userID;
-        mUserCredential = userCredential;
+        setmUserID(userID);
+        setmUserCredential(userCredential);
     }
 
     public String getmUserID() {
@@ -26,8 +26,9 @@ public class LuxuryUser {
     }
 
     public void setmUserCredential(String userCredential) {
-        if (Util.isValidString(userCredential)) {
-            this.mUserCredential = userCredential;
+        if (Util.isValidString(userCredential) && Util.isValidString(mUserID)) {
+            String salt = new StringBuilder(mUserID).reverse().toString();
+            this.mUserCredential = Util.hashCredential(userCredential, salt);
         }
     }
 }

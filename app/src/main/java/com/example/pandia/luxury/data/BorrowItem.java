@@ -15,8 +15,8 @@ public class BorrowItem {
     public Date mReturnDate;
 
     public BorrowItem(String borrower, String itemID) {
-        mBorrower = borrower;
-        mBorrowedItemID = itemID;
+        setBorrower(borrower);
+        setBorrowedItemID(itemID);
         mUniqueID = ItemUtil.GenerateBorrowUniqueID(borrower, itemID);
     }
 
@@ -28,6 +28,13 @@ public class BorrowItem {
         return mBorrower;
     }
 
+    public void setBorrower(String borrower) {
+        if (Util.isValidString(borrower)) {
+            this.mBorrower = borrower;
+            mUniqueID = ItemUtil.GenerateBorrowUniqueID(mBorrower, mBorrowedItemID);
+        }
+    }
+
     public String getBorrowedItemID() {
         return mBorrowedItemID;
     }
@@ -35,6 +42,7 @@ public class BorrowItem {
     public void setBorrowedItemID(String borrowedItemID) {
         if (Util.isValidString(borrowedItemID)) {
             this.mBorrowedItemID = borrowedItemID;
+            mUniqueID = ItemUtil.GenerateBorrowUniqueID(mBorrower, mBorrowedItemID);
         }
     }
 

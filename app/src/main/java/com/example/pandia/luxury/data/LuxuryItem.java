@@ -19,14 +19,13 @@ public class LuxuryItem {
     public TreeMap<String, String> mExtraData;
 
     public LuxuryItem(String itemName) {
-        mItemName = itemName;
-        mPrice = LuxuryItemConstants.ITEM_DEFAULT_PRICE;
-        mPurchasedDate = new Date();
-        mItemImage = null;
-        mItemType = LuxuryItemConstants.LuxuryType.OTHER_TYPE;
+        setItemName(itemName);
+        setmItemType(LuxuryItemConstants.LuxuryType.OTHER_TYPE);
 
-        mUniqueID = ItemUtil.GenerateItemUniqueID(itemName, mItemType);
-
+        setPrice(LuxuryItemConstants.ITEM_DEFAULT_PRICE);
+        setPurchasedDate(new Date());
+        setItemImage(null);
+        mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
         mExtraData = new TreeMap<String, String>();
     }
 
@@ -39,8 +38,10 @@ public class LuxuryItem {
     }
 
     public void setItemName(String itemName) {
-        this.mItemName = itemName;
-        mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
+        if (Util.isValidString(itemName)) {
+            this.mItemName = itemName;
+            mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
+        }
     }
 
     public int getPrice() {
@@ -48,7 +49,7 @@ public class LuxuryItem {
     }
 
     public void setPrice(int price) {
-        if (price > 0) {
+        if (price >= 0) {
             this.mPrice = price;
         }
     }
