@@ -11,10 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
+import com.example.pandia.luxury.util.QRCodeUtil;
 
 public class QRCodeEncodeActivity extends AppCompatActivity {
 
@@ -22,9 +19,6 @@ public class QRCodeEncodeActivity extends AppCompatActivity {
     private EditText mPlainText;
     private ImageView mPreviewImage;
     private EncodingTask mEncodeTask;
-
-    private static final int WHITE = 0xFFFFFFFF;
-    private static final int BLACK = 0xFF000000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +56,7 @@ public class QRCodeEncodeActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             if (mText != null) {
                 Log.i("pandia", "doInBG: " + mText);
-                mBitmap = encodeImage(mText);
+                mBitmap = QRCodeUtil.GenerateQRCodeImage(mText);
                 if (mBitmap != null) {
                     return true;
                 }
@@ -83,35 +77,5 @@ public class QRCodeEncodeActivity extends AppCompatActivity {
         protected void onCancelled() {
             mEncodeTask = null;
         }
-    }
-
-    private static Bitmap encodeImage(String plainText) {
-        Bitmap bitmap = null;
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(plainText, BarcodeFormat.QR_CODE,200,200);
-            bitmap = createBitmap(bitMatrix);
-
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-
-    private static Bitmap createBitmap(BitMatrix matrix) {
-        int width = matrix.getWidth();
-        int height = matrix.getHeight();
-        int[] pixels = new int[width * height];
-
-        for (int y = 0; y < height; y++) {
-            int offset = y * width;
-            for (int x = 0; x < width; x++) {
-                pixels[offset + x] = matrix.get(x, y) ? BLACK : WHITE;
-            }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        return bitmap;
     }
 }
