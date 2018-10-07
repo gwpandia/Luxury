@@ -125,6 +125,21 @@ public class ItemDAO {
         return item;
     }
 
+    public LuxuryItem getLuxuryItemByUniqueID(String uniqueID) {
+        LuxuryItem item = null;
+        String where = UNIQUE_ID + "=" + uniqueID;
+        Cursor result = mDB.query(
+                LUXURYITEM_TABLE_NAME, null, where, null,
+                null, null, null, null);
+
+        if (result.moveToFirst()) {
+            item = getLuxuryItemRecord(result);
+        }
+
+        result.close();
+        return item;
+    }
+
     public LuxuryItem getLuxuryItemRecord(Cursor cursor) {
         // 準備回傳結果用的物件
         LuxuryItem result = new LuxuryItem("UNINIT_ITEM");
@@ -199,6 +214,21 @@ public class ItemDAO {
     public BorrowItem getBorrowItem(long id) {
         BorrowItem item = null;
         String where = KEY_ID + "=" + id;
+        Cursor result = mDB.query(
+                BORROWITEM_TABLE_NAME, null, where, null,
+                null, null, null, null);
+
+        if (result.moveToFirst()) {
+            item = getBorrowItemRecord(result);
+        }
+
+        result.close();
+        return item;
+    }
+
+    public BorrowItem getBorrowItemByUniqueID(String uniqueID) {
+        BorrowItem item = null;
+        String where = UNIQUE_ID + "=" + uniqueID;
         Cursor result = mDB.query(
                 BORROWITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);
