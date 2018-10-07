@@ -4,33 +4,44 @@ import android.media.Image;
 import com.example.pandia.luxury.util.ItemUtil;
 import com.example.pandia.luxury.util.Util;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.TreeMap;
 
 
 public class LuxuryItem {
 
-    public String mUniqueID;
-    public String mItemName;
-    public int mPrice;
-    public Date mPurchasedDate;
-    public Image mItemImage;
-    public LuxuryItemConstants.LuxuryType mItemType;
-    public TreeMap<String, String> mExtraData;
+    private long mDataBaseID;
+    private String mUniqueID;
+    private String mItemName;
+    private int mPrice;
+    private Date mPurchasedDate;
+    private Image mItemImage;
+    private LuxuryItemConstants.LuxuryType mItemType;
+    private TreeMap<String, String> mExtraData;
 
     public LuxuryItem(String itemName) {
         setItemName(itemName);
-        setmItemType(LuxuryItemConstants.LuxuryType.OTHER_TYPE);
+        setItemType(LuxuryItemConstants.LuxuryType.OTHER_TYPE);
 
         setPrice(LuxuryItemConstants.ITEM_DEFAULT_PRICE);
         setPurchasedDate(new Date());
         setItemImage(null);
+
+        mDataBaseID = -1;
         mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
         mExtraData = new TreeMap<String, String>();
     }
 
     public String getUniqueID() {
         return mUniqueID;
+    }
+
+    public void setUniqueID(String uniqueID) {
+        if (Util.isValidString(uniqueID)) {
+            this.mUniqueID = mUniqueID;
+        }
     }
 
     public String getItemName() {
@@ -70,11 +81,11 @@ public class LuxuryItem {
         this.mItemImage = itemImage;
     }
 
-    public LuxuryItemConstants.LuxuryType getmItemType() {
+    public LuxuryItemConstants.LuxuryType getItemType() {
         return mItemType;
     }
 
-    public void setmItemType(LuxuryItemConstants.LuxuryType itemType) {
+    public void setItemType(LuxuryItemConstants.LuxuryType itemType) {
         this.mItemType = itemType;
         mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
     }
@@ -98,5 +109,23 @@ public class LuxuryItem {
 
     public String getExtraData(String key) {
         return mExtraData.getOrDefault(key, LuxuryItemConstants.ITEM_DEFAULT_EXTRA_VALUE);
+    }
+
+    public void setAllExtraData(TreeMap<String, String> extraData) {
+        if (extraData != null) {
+            mExtraData = extraData;
+        }
+    }
+
+    public TreeMap<String, String> getAllExtraData() {
+        return mExtraData;
+    }
+
+    public long getDataBaseID() {
+        return mDataBaseID;
+    }
+
+    public void setDataBaseID(long mDataBaseID) {
+        this.mDataBaseID = mDataBaseID;
     }
 }

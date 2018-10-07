@@ -6,18 +6,33 @@ import com.example.pandia.luxury.util.Util;
 import java.util.Date;
 
 public class BorrowItem {
-
-    public String mUniqueID;
-    // A user from contact ?
-    public String mBorrower;
-    public String mBorrowedItemID;
-    public Date mBorrowDate;
-    public Date mReturnDate;
+    private long mDataBaseID;
+    private String mUniqueID;
+    //TODO: A user from contact ?
+    private String mBorrower;
+    private String mBorrowedItemID;
+    private Date mBorrowDate;
+    private Date mReturnDate;
 
     public BorrowItem(String borrower, String itemID) {
         setBorrower(borrower);
         setBorrowedItemID(itemID);
+        mDataBaseID = -1;
         mUniqueID = ItemUtil.GenerateBorrowUniqueID(borrower, itemID);
+    }
+
+    public long getDataBaseID() {
+        return mDataBaseID;
+    }
+
+    public void setDataBaseID(long databaseID) {
+        this.mDataBaseID = databaseID;
+    }
+
+    public void setUniqueID (String uniqueID) {
+        if (Util.isValidString(uniqueID)) {
+            this.mUniqueID = uniqueID;
+        }
     }
 
     public String getUniqueID() {

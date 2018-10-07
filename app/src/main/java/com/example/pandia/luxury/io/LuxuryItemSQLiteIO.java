@@ -1,12 +1,21 @@
 package com.example.pandia.luxury.io;
 
+import android.content.Context;
+
 import com.example.pandia.luxury.data.LuxuryItem;
 import com.example.pandia.luxury.interfaces.Writable;
 import com.example.pandia.luxury.interfaces.Readable;
+import com.example.pandia.luxury.io.sqlite.ItemDAO;
 
 public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<LuxuryItem> {
 
-    private SQLiteHandler sqLiteHandler;
+    private Context mContext;
+    private ItemDAO mItemDAO;
+
+    public LuxuryItemSQLiteIO(Context context) {
+        mContext = context;
+        mItemDAO = new ItemDAO(mContext);
+    }
 
     @Override
     public void initializeReader() {
@@ -14,17 +23,21 @@ public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<Luxury
     }
 
     @Override
-    public int entrySize() {
-        return 0;
+    public long entrySize() {
+        return mItemDAO.getLuxuryItemCount();
     }
 
     @Override
-    public boolean isInBound(int i) {
+    public boolean isInBound(long i) {
         return i >= 0 && i < entrySize();
     }
 
     @Override
-    public LuxuryItem readEntry(int i) {
+    public LuxuryItem readEntry(long i) {
+        //TODO: Query too much for boundary
+        if (isInBound(i)) {
+            return mItemDAO.getLuxuryItem(i);
+        }
         return null;
     }
 
@@ -40,11 +53,12 @@ public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<Luxury
 
     @Override
     public void writeEntry(LuxuryItem entry) {
-
+        //TODO: how about update data
+        mItemDAO.insertLuxuryItem(entry);
     }
 
     @Override
-    public int writtenEntries() {
+    public long writtenEntries() {
         return 0;
     }
 

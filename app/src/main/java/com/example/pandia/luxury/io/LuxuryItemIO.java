@@ -30,7 +30,7 @@ public class LuxuryItemIO {
         return readRangeLuxuryData(0, reader.entrySize(), reader);
     }
 
-    public static ArrayList<LuxuryItem> readRangeLuxuryData(int start, int end, Readable<LuxuryItem> reader) {
+    public static ArrayList<LuxuryItem> readRangeLuxuryData(long start, long end, Readable<LuxuryItem> reader) {
         if (reader == null) {
             return null;
         }
@@ -42,7 +42,7 @@ public class LuxuryItemIO {
         ArrayList<LuxuryItem> allData = new ArrayList<LuxuryItem>();
         reader.initializeReader();
 
-        for (int i = start; i < end; ++i) {
+        for (long i = start; i < end; ++i) {
             if (reader.isInBound(i)) {
                 allData.add(reader.readEntry(i));
             }

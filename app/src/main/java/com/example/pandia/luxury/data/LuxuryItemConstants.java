@@ -90,18 +90,28 @@ public class LuxuryItemConstants {
     public static final String ITEM_DEFAULT_EXTRA_VALUE = "EMPTY_EXTRA";
 
     public enum LuxuryType {
-        OTHER_TYPE,
-        MODEL,
-        LEGO,
-        BOOK,
-        GAME_CONSOLE,
-        GAME_ACCESSORY,
-        GAME,
-        EARPHONE,
-        COMPUTER,
-        PHONE,
-        CAMERA,
-        LENS
+        OTHER_TYPE(0),
+        MODEL(10),
+        LEGO(20),
+        BOOK(30),
+        GAME_CONSOLE(40),
+        GAME_ACCESSORY(50),
+        GAME(60),
+        EARPHONE(70),
+        COMPUTER(80),
+        PHONE(90),
+        CAMERA(100),
+        LENS(110);
+
+        private final int value;
+
+        LuxuryType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     public static final Map<LuxuryType, String> LUXURY_TYPE_DISPLAY_NAME;

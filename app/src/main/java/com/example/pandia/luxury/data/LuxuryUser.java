@@ -3,8 +3,8 @@ package com.example.pandia.luxury.data;
 import com.example.pandia.luxury.util.Util;
 
 public class LuxuryUser {
-    public String mUserID;
-    public String mUserCredential;
+    private String mUserID;
+    private String mUserCredential;
 
     public LuxuryUser(String userID, String userCredential) {
         setmUserID(userID);

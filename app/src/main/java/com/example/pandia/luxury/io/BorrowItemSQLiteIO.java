@@ -1,27 +1,42 @@
 package com.example.pandia.luxury.io;
 
+import android.content.Context;
+
 import com.example.pandia.luxury.data.BorrowItem;
 import com.example.pandia.luxury.interfaces.Readable;
 import com.example.pandia.luxury.interfaces.Writable;
+import com.example.pandia.luxury.io.sqlite.ItemDAO;
 
-public class BorrowItemSQLiteIO  implements Writable<BorrowItem>, Readable<BorrowItem> {
+public class BorrowItemSQLiteIO implements Writable<BorrowItem>, Readable<BorrowItem> {
+
+    private Context mContext;
+    private ItemDAO mItemDAO;
+
+    public BorrowItemSQLiteIO(Context context) {
+        mContext = context;
+        mItemDAO = new ItemDAO(mContext);
+    }
     @Override
     public void initializeReader() {
 
     }
 
     @Override
-    public int entrySize() {
-        return 0;
+    public long entrySize() {
+        return mItemDAO.getBorrowItemCount();
     }
 
     @Override
-    public boolean isInBound(int i) {
+    public boolean isInBound(long i) {
         return i >= 0 && i < entrySize();
     }
 
     @Override
-    public BorrowItem readEntry(int i) {
+    public BorrowItem readEntry(long i) {
+        //TODO: Query too much for boundary
+        if (isInBound(i)) {
+            return mItemDAO.getBorrowItem(i);
+        }
         return null;
     }
 
@@ -37,11 +52,12 @@ public class BorrowItemSQLiteIO  implements Writable<BorrowItem>, Readable<Borro
 
     @Override
     public void writeEntry(BorrowItem entry) {
-
+        //TODO: how about update data
+        mItemDAO.insertBorrowItem(entry);
     }
 
     @Override
-    public int writtenEntries() {
+    public long writtenEntries() {
         return 0;
     }
 

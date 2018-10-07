@@ -1,14 +1,47 @@
 package com.example.pandia.luxury.util;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Util {
     public static boolean isValidString(String string) {
         return string != null && !string.isEmpty();
+    }
+
+    public static Date convertStringToDate(String string) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = sdf.parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static String convertToDateString(Date date) {
+        if (date == null) {
+            return "";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDate = sdf.format(date);
+        return currentDate;
     }
 
     public static String getCurrentDateString(){
@@ -48,5 +81,83 @@ public class Util {
             e.printStackTrace();
         }
         return generatedPassword;
+    }
+
+    public static String convertMapToJSonString(Map<String, String> map) {
+        if (map == null) {
+            return "";
+        }
+        return new JSONObject(map).toString();
+    }
+
+    public static TreeMap<String, String> convertJSonStringToMap(String json) {
+        TreeMap<String, String> theMap = null;
+        if (json == null) {
+            return null;
+        }
+        try {
+            theMap = jsonToMap(new JSONObject(json));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return theMap;
+    }
+
+    private static TreeMap<String, String> jsonToMap(JSONObject json) throws JSONException {
+        TreeMap<String, String> retMap = new TreeMap<String, String>();
+
+        if(json != JSONObject.NULL) {
+            retMap = toMap(json);
+        }
+        return retMap;
+    }
+
+    private static TreeMap<String, String> toMap(JSONObject object) throws JSONException {
+        TreeMap<String, String> map = new TreeMap<String, String>();
+
+        Iterator<String> keysItr = object.keys();
+        while(keysItr.hasNext()) {
+            String key = keysItr.next();
+            Object value = object.get(key);
+
+            if(value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            }
+
+            else if(value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+
+            if (value instanceof String) {
+                map.put(key, (String) value);
+            }
+            else {
+                assert(false);
+            }
+        }
+        return map;
+    }
+
+    private static List<String> toList(JSONArray array) throws JSONException {
+        List<String> list = new ArrayList<String>();
+        for(int i = 0; i < array.length(); i++) {
+            Object value = array.get(i);
+            if(value instanceof JSONArray) {
+                value = toList((JSONArray) value);
+            }
+
+            else if(value instanceof JSONObject) {
+                value = toMap((JSONObject) value);
+            }
+
+            if (value instanceof String) {
+                list.add((String) value);
+            }
+            else {
+                assert(false);
+            }
+        }
+        return list;
     }
 }

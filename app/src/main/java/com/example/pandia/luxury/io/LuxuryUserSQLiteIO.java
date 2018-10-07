@@ -4,9 +4,7 @@ import com.example.pandia.luxury.data.LuxuryUser;
 import com.example.pandia.luxury.interfaces.Readable;
 import com.example.pandia.luxury.interfaces.Writable;
 
-public class LuxuryUserSQLiteIO  implements Writable<LuxuryUser>, Readable<LuxuryUser> {
-
-    private SQLiteHandler sqLiteHandler;
+public class LuxuryUserSQLiteIO implements Writable<LuxuryUser>, Readable<LuxuryUser> {
 
     @Override
     public void initializeReader() {
@@ -14,17 +12,17 @@ public class LuxuryUserSQLiteIO  implements Writable<LuxuryUser>, Readable<Luxur
     }
 
     @Override
-    public int entrySize() {
+    public long entrySize() {
         return 0;
     }
 
     @Override
-    public boolean isInBound(int i) {
+    public boolean isInBound(long i) {
         return i >= 0 && i < entrySize();
     }
 
     @Override
-    public LuxuryUser readEntry(int i) {
+    public LuxuryUser readEntry(long i) {
         return null;
     }
 
@@ -44,7 +42,7 @@ public class LuxuryUserSQLiteIO  implements Writable<LuxuryUser>, Readable<Luxur
     }
 
     @Override
-    public int writtenEntries() {
+    public long writtenEntries() {
         return 0;
     }
 

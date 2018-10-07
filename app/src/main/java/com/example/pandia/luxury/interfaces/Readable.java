@@ -2,8 +2,8 @@ package com.example.pandia.luxury.interfaces;
 
 public interface Readable<T> {
     public void initializeReader();
-    public int entrySize();
-    public boolean isInBound(int i);
-    public T readEntry(int i);
+    public long entrySize();
+    public boolean isInBound(long i);
+    public T readEntry(long i);
     public void finishReader();
 }
