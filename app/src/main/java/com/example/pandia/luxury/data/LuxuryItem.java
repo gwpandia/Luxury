@@ -1,27 +1,26 @@
 package com.example.pandia.luxury.data;
 
-import android.media.Image;
+import android.graphics.Bitmap;
 import com.example.pandia.luxury.util.ItemUtil;
 import com.example.pandia.luxury.util.Util;
-
-import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.TreeMap;
 
+import androidx.annotation.NonNull;
 
-public class LuxuryItem {
 
-    private long mDataBaseID;
-    private String mUniqueID;
+public class LuxuryItem extends BaseItem {
+
     private String mItemName;
     private int mPrice;
     private Date mPurchasedDate;
-    private Image mItemImage;
+    private Bitmap mItemImage;
     private LuxuryItemConstants.LuxuryType mItemType;
     private TreeMap<String, String> mExtraData;
 
     public LuxuryItem(String itemName) {
+        super();
         setItemName(itemName);
         setItemType(LuxuryItemConstants.LuxuryType.OTHER_TYPE);
 
@@ -29,19 +28,8 @@ public class LuxuryItem {
         setPurchasedDate(new Date());
         setItemImage(null);
 
-        mDataBaseID = -1;
-        mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
+        updateUniqueID();
         mExtraData = new TreeMap<String, String>();
-    }
-
-    public String getUniqueID() {
-        return mUniqueID;
-    }
-
-    public void setUniqueID(String uniqueID) {
-        if (Util.isValidString(uniqueID)) {
-            this.mUniqueID = mUniqueID;
-        }
     }
 
     public String getItemName() {
@@ -51,7 +39,7 @@ public class LuxuryItem {
     public void setItemName(String itemName) {
         if (Util.isValidString(itemName)) {
             this.mItemName = itemName;
-            mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
+            updateUniqueID();
         }
     }
 
@@ -73,11 +61,11 @@ public class LuxuryItem {
         this.mPurchasedDate = purchasedDate;
     }
 
-    public Image getItemImage() {
+    public Bitmap getItemImage() {
         return mItemImage;
     }
 
-    public void setItemImage(Image itemImage) {
+    public void setItemImage(Bitmap itemImage) {
         this.mItemImage = itemImage;
     }
 
@@ -87,7 +75,7 @@ public class LuxuryItem {
 
     public void setItemType(LuxuryItemConstants.LuxuryType itemType) {
         this.mItemType = itemType;
-        mUniqueID = ItemUtil.GenerateItemUniqueID(mItemName, mItemType);
+        updateUniqueID();
     }
 
     public void addExtraData(String key, String value) {
@@ -121,11 +109,32 @@ public class LuxuryItem {
         return mExtraData;
     }
 
-    public long getDataBaseID() {
-        return mDataBaseID;
+    @NonNull
+    @Override
+    public String toString() {
+        String ret =
+                "[LuxuryItem] dbID: " + mDataBaseID + ", UniqueID: " + mUniqueID +
+                ", ItemName: " + mItemName + ", Price: " + mPrice +
+                ", PurchaseDate: " + Util.convertToDateString(mPurchasedDate) +
+                ", ItemType: " + mItemType + ", HasImage:" + ((mItemImage != null) ? "true": "false");
+
+        String extraData = ", ExtraData: [";
+        for (String key: mExtraData.keySet()) {
+            extraData += "(" + key + ", " + mExtraData.get(key) + "), ";
+        }
+
+        if (!mExtraData.isEmpty()) {
+            extraData = extraData.substring(0, extraData.length() - 2);
+        }
+
+        extraData += "]";
+
+        return ret + extraData;
     }
 
-    public void setDataBaseID(long mDataBaseID) {
-        this.mDataBaseID = mDataBaseID;
+    @Override
+    protected void updateUniqueID() {
+        mUniqueID = ItemUtil.generateItemUniqueID(mItemName, mItemType,
+                Util.convertToLocalDateTimeString(mCreateDate));
     }
 }

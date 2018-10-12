@@ -19,12 +19,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Util {
+    private static final String DATE_FORMAT = "yyyy-MM-dd,HH:mm:ss";
+
     public static boolean isValidString(String string) {
         return string != null && !string.isEmpty();
     }
 
     public static Date convertStringToDate(String string) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         Date date = null;
         try {
             date = sdf.parse(string);
@@ -39,16 +41,23 @@ public class Util {
             return "";
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         String currentDate = sdf.format(date);
         return currentDate;
     }
 
-    public static String getCurrentDateString(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd,HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        String currentDate = dtf.format(now);
+    public static String convertToLocalDateTimeString(LocalDateTime localDateTime){
+        if (localDateTime == null) {
+            return "";
+        }
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        String currentDate = dtf.format(localDateTime);
         return currentDate;
+    }
+
+    public static String getCurrentDateString(){
+        LocalDateTime now = LocalDateTime.now();
+        return convertToLocalDateTimeString(now);
     }
 
     public static String hashText(String plainText) {

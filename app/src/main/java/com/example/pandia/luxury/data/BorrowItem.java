@@ -5,9 +5,9 @@ import com.example.pandia.luxury.util.Util;
 
 import java.util.Date;
 
-public class BorrowItem {
-    private long mDataBaseID;
-    private String mUniqueID;
+import androidx.annotation.NonNull;
+
+public class BorrowItem  extends BaseItem{
     //TODO: A user from contact ?
     private String mBorrower;
     private String mBorrowedItemID;
@@ -15,28 +15,11 @@ public class BorrowItem {
     private Date mReturnDate;
 
     public BorrowItem(String borrower, String itemID) {
+        super();
         setBorrower(borrower);
         setBorrowedItemID(itemID);
         mDataBaseID = -1;
-        mUniqueID = ItemUtil.GenerateBorrowUniqueID(borrower, itemID);
-    }
-
-    public long getDataBaseID() {
-        return mDataBaseID;
-    }
-
-    public void setDataBaseID(long databaseID) {
-        this.mDataBaseID = databaseID;
-    }
-
-    public void setUniqueID (String uniqueID) {
-        if (Util.isValidString(uniqueID)) {
-            this.mUniqueID = uniqueID;
-        }
-    }
-
-    public String getUniqueID() {
-        return mUniqueID;
+        updateUniqueID();
     }
 
     public String getBorrower() {
@@ -46,7 +29,7 @@ public class BorrowItem {
     public void setBorrower(String borrower) {
         if (Util.isValidString(borrower)) {
             this.mBorrower = borrower;
-            mUniqueID = ItemUtil.GenerateBorrowUniqueID(mBorrower, mBorrowedItemID);
+            updateUniqueID();
         }
     }
 
@@ -57,7 +40,7 @@ public class BorrowItem {
     public void setBorrowedItemID(String borrowedItemID) {
         if (Util.isValidString(borrowedItemID)) {
             this.mBorrowedItemID = borrowedItemID;
-            mUniqueID = ItemUtil.GenerateBorrowUniqueID(mBorrower, mBorrowedItemID);
+            updateUniqueID();
         }
     }
 
@@ -75,5 +58,22 @@ public class BorrowItem {
 
     public void setReturnDate(Date returnDate) {
         this.mReturnDate = returnDate;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String ret = "[BorrowItem] dbID: " + mDataBaseID + ", UniqueID: " + mUniqueID +
+                ", Borrower: " + mBorrower + ", BorrowItemID: " + mBorrowedItemID +
+                ", BorrowDate: " + Util.convertToDateString(mBorrowDate) +
+                ", ReturnDate: " + Util.convertToDateString(mReturnDate);
+
+        return ret;
+    }
+
+    @Override
+    protected void updateUniqueID() {
+        mUniqueID = ItemUtil.generateBorrowUniqueID(mBorrower, mBorrowedItemID,
+                Util.convertToLocalDateTimeString(mCreateDate));
     }
 }

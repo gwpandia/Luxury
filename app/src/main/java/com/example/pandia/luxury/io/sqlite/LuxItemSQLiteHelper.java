@@ -5,24 +5,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class SQLiteHelper extends SQLiteOpenHelper {
+public class LuxItemSQLiteHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "myluxury.db";
-    public static final int DATABASE_VERSION = 1;
-    private static SQLiteDatabase mDatabase;
+    public static final String LUX_ITEM_DATABASE_NAME = "myluxury.db";
+    public static final int LUX_ITEM_DATABASE_VERSION = 1;
+    private static SQLiteDatabase mLuxItemDatabase;
 
-    public SQLiteHelper(Context context, String name, CursorFactory factory,
-                      int version) {
+    public LuxItemSQLiteHelper(Context context, String name, CursorFactory factory,
+                               int version) {
         super(context, name, factory, version);
     }
 
-    public static SQLiteDatabase getDatabase(Context context) {
-        if (mDatabase == null || !mDatabase.isOpen()) {
-            mDatabase = new SQLiteHelper(context, DATABASE_NAME,
-                    null, DATABASE_VERSION).getWritableDatabase();
+    public static SQLiteDatabase getLuxItemDatabase(Context context) {
+        if (mLuxItemDatabase == null || !mLuxItemDatabase.isOpen()) {
+            mLuxItemDatabase = new LuxItemSQLiteHelper(context, LUX_ITEM_DATABASE_NAME,
+                    null, LUX_ITEM_DATABASE_VERSION).getWritableDatabase();
         }
 
-        return mDatabase;
+        return mLuxItemDatabase;
     }
 
     @Override
