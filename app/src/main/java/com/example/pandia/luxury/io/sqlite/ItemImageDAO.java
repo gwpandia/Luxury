@@ -37,6 +37,12 @@ public class ItemImageDAO {
         mDB = LuxItemImageSQLiteHelper.getLuxItemImageDatabase(context);
     }
 
+    public void closeDB() {
+        if (mDB.isOpen()) {
+            mDB.close();
+        }
+    }
+
     public boolean insertLuxuryItemImage(String uniqueID, Bitmap bitmap) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(UNIQUE_ID, uniqueID);

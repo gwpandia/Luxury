@@ -66,6 +66,12 @@ public class ItemDAO {
         mDB = LuxItemSQLiteHelper.getLuxItemDatabase(context);
     }
 
+    public void closeDB() {
+        if (mDB.isOpen()) {
+            mDB.close();
+        }
+    }
+
     public LuxuryItem insertLuxuryItem(LuxuryItem item) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(UNIQUE_ID, item.getUniqueID());

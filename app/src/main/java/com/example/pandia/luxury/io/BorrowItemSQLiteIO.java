@@ -43,7 +43,7 @@ public class BorrowItemSQLiteIO implements Writable<BorrowItem>, Readable<Borrow
 
     @Override
     public void finishReader() {
-
+        mItemDAO.closeDB();
     }
 
     @Override
@@ -68,6 +68,6 @@ public class BorrowItemSQLiteIO implements Writable<BorrowItem>, Readable<Borrow
 
     @Override
     public void finishWriter() {
-
+        mItemDAO.closeDB();
     }
 }

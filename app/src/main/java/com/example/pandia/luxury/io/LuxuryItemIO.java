@@ -1,6 +1,7 @@
 package com.example.pandia.luxury.io;
 
 import com.example.pandia.luxury.data.LuxuryItem;
+import com.example.pandia.luxury.interfaces.RangeReadable;
 import com.example.pandia.luxury.interfaces.Readable;
 import com.example.pandia.luxury.interfaces.Writable;
 
@@ -23,37 +24,27 @@ public class LuxuryItemIO {
     }
 
     // dynamically loading ?
-    public static ArrayList<LuxuryItem> readAllLuxuryData(Readable<LuxuryItem> reader) {
+    public static ArrayList<LuxuryItem> readAllLuxuryData(RangeReadable<LuxuryItem> reader) {
         if (reader == null) {
             return null;
         }
         return readRangeLuxuryData(0, reader.entrySize(), reader);
     }
 
-    public static ArrayList<LuxuryItem> readRangeLuxuryData(long start, long end, Readable<LuxuryItem> reader) {
-        if (reader == null) {
-            return null;
-        }
-
-        if (end < start) {
+    public static ArrayList<LuxuryItem> readRangeLuxuryData(long start, long end, RangeReadable<LuxuryItem> reader) {
+        if (reader == null || end < start) {
             return null;
         }
 
         ArrayList<LuxuryItem> allData = new ArrayList<LuxuryItem>();
         reader.initializeReader();
-
-        for (long i = start; i < end; ++i) {
-            if (reader.isInBound(i)) {
-                allData.add(reader.readEntry(i));
-            }
-        }
-
+        allData.addAll(reader.readRangeEntries(start, end));
         reader.finishReader();
 
         return allData;
     }
 
-    public static LuxuryItem readOneLuxuryData(int i, Readable<LuxuryItem> reader) {
+    public static LuxuryItem readOneLuxuryData(long i, Readable<LuxuryItem> reader) {
         if (reader == null) {
             return null;
         }

@@ -54,7 +54,8 @@ public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<Luxury
 
     @Override
     public void finishReader() {
-
+        mItemDAO.closeDB();
+        mItemImageDAO.closeDB();
     }
 
     @Override
@@ -90,7 +91,8 @@ public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<Luxury
 
     @Override
     public void finishWriter() {
-
+        mItemDAO.closeDB();
+        mItemImageDAO.closeDB();
     }
 
     @Override
