@@ -1,10 +1,10 @@
 package com.example.pandia.luxury.io;
 
 import com.example.pandia.luxury.data.LuxuryUser;
-import com.example.pandia.luxury.interfaces.Readable;
-import com.example.pandia.luxury.interfaces.Writable;
+import com.example.pandia.luxury.io.interfaces.IReadable;
+import com.example.pandia.luxury.io.interfaces.IWritable;
 
-public class LuxuryUserSQLiteIO implements Writable<LuxuryUser>, Readable<LuxuryUser> {
+public class LuxuryUserSQLiteIO implements IWritable<LuxuryUser>, IReadable<LuxuryUser> {
 
     @Override
     public void initializeReader() {

@@ -3,11 +3,11 @@ package com.example.pandia.luxury.io;
 import android.content.Context;
 
 import com.example.pandia.luxury.data.BorrowItem;
-import com.example.pandia.luxury.interfaces.Readable;
-import com.example.pandia.luxury.interfaces.Writable;
+import com.example.pandia.luxury.io.interfaces.IReadable;
+import com.example.pandia.luxury.io.interfaces.IWritable;
 import com.example.pandia.luxury.io.sqlite.ItemDAO;
 
-public class BorrowItemSQLiteIO implements Writable<BorrowItem>, Readable<BorrowItem> {
+public class BorrowItemSQLiteIO implements IWritable<BorrowItem>, IReadable<BorrowItem> {
 
     private Context mContext;
     private ItemDAO mItemDAO;

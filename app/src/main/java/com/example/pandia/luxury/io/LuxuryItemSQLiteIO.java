@@ -4,16 +4,16 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.example.pandia.luxury.data.LuxuryItem;
-import com.example.pandia.luxury.interfaces.RangeReadable;
-import com.example.pandia.luxury.interfaces.Writable;
-import com.example.pandia.luxury.interfaces.Readable;
+import com.example.pandia.luxury.io.interfaces.IRangeReadable;
+import com.example.pandia.luxury.io.interfaces.IWritable;
+import com.example.pandia.luxury.io.interfaces.IReadable;
 import com.example.pandia.luxury.io.sqlite.ItemDAO;
 import com.example.pandia.luxury.io.sqlite.ItemImageDAO;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class LuxuryItemSQLiteIO implements Writable<LuxuryItem>, Readable<LuxuryItem>, RangeReadable<LuxuryItem> {
+public class LuxuryItemSQLiteIO implements IWritable<LuxuryItem>, IReadable<LuxuryItem>, IRangeReadable<LuxuryItem> {
 
     private Context mContext;
     private ItemDAO mItemDAO;
