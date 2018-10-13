@@ -45,6 +45,16 @@ public class LuxuryListPresenter implements ILuxuryListPresenter {
     }
 
     @Override
+    public void deleteLuxuryItem(String uniqueID) {
+        mModel.removeLuxuryItem(uniqueID);
+    }
+
+    @Override
+    public void deleteLuxuryItem(long id) {
+        mModel.removeLuxuryItem(id);
+    }
+
+    @Override
     public void onListUpdated() {
         mView.updateListViewItems(mModel.getLuxuryItems());
     }

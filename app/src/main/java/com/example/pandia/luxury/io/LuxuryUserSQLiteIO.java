@@ -42,6 +42,16 @@ public class LuxuryUserSQLiteIO implements IWritable<LuxuryUser>, IReadable<Luxu
     }
 
     @Override
+    public void removeEntry(String uniqueID) {
+
+    }
+
+    @Override
+    public void removeEntry(long id) {
+
+    }
+
+    @Override
     public long writtenEntries() {
         return 0;
     }

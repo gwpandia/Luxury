@@ -60,8 +60,8 @@ public class LuxuryItemSQLiteIO implements IWritable<LuxuryItem>, IReadable<Luxu
 
     @Override
     public void finishReader() {
-        mItemDAO.closeDB();
-        mItemImageDAO.closeDB();
+        //mItemDAO.closeDB();
+        //mItemImageDAO.closeDB();
     }
 
     @Override
@@ -91,14 +91,32 @@ public class LuxuryItemSQLiteIO implements IWritable<LuxuryItem>, IReadable<Luxu
     }
 
     @Override
+    public void removeEntry(String uniqueID) {
+        if (mItemDAO.isLuxuryItemExists(uniqueID)) {
+            mItemDAO.deleteLuxuryItem(uniqueID);
+        }
+
+        if (mItemImageDAO.isLuxuryItemImageExists(uniqueID)) {
+            mItemImageDAO.deleteLuxuryItemImage(uniqueID);
+        }
+    }
+
+    @Override
+    public void removeEntry(long id) {
+        mItemDAO.deleteLuxuryItem(id);
+        //TODO: Fix Image ID
+        //mItemImageDAO.deleteLuxuryItemImage();
+    }
+
+    @Override
     public long writtenEntries() {
         return 0;
     }
 
     @Override
     public void finishWriter() {
-        mItemDAO.closeDB();
-        mItemImageDAO.closeDB();
+        //mItemDAO.closeDB();
+        //mItemImageDAO.closeDB();
     }
 
     @Override

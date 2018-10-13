@@ -62,6 +62,18 @@ public class BorrowItemSQLiteIO implements IWritable<BorrowItem>, IReadable<Borr
     }
 
     @Override
+    public void removeEntry(String uniqueID) {
+        if (mItemDAO.isBorrowItemExists(uniqueID)) {
+            mItemDAO.deleteBorrowItem(uniqueID);
+        }
+    }
+
+    @Override
+    public void removeEntry(long id) {
+        mItemDAO.deleteBorrowItem(id);
+    }
+
+    @Override
     public long writtenEntries() {
         return 0;
     }

@@ -13,4 +13,5 @@ public interface ILuxuryListModel {
     public boolean addLuxuryItem(LuxuryItem luxuryItem);
     public boolean updateLuxuryItem(LuxuryItem luxuryItem);
     public boolean removeLuxuryItem(String uniqueID);
+    public boolean removeLuxuryItem(long id);
 }

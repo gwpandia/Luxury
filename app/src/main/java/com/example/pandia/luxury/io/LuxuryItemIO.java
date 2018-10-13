@@ -62,4 +62,24 @@ public class LuxuryItemIO {
         reader.finishReader();
         return data;
     }
+
+    public static boolean deleteLuxuryItemData(String uniqueID, IWritable<LuxuryItem> writer) {
+        if (writer == null) {
+            return false;
+        }
+        writer.initializeWriter();
+        writer.removeEntry(uniqueID);
+        writer.finishWriter();
+        return true;
+    }
+
+    public static boolean deleteLuxuryItemData(long id, IWritable<LuxuryItem> writer) {
+        if (writer == null) {
+            return false;
+        }
+        writer.initializeWriter();
+        writer.removeEntry(id);
+        writer.finishWriter();
+        return true;
+    }
 }

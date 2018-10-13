@@ -178,6 +178,15 @@ public class LuxuryListModel implements ILuxuryListModel {
 
     @Override
     public boolean removeLuxuryItem(String uniqueID) {
-        return false;
+        boolean ret = LuxuryItemIO.deleteLuxuryItemData(uniqueID, mLuxuryWriter);
+        ret = ret && loadAllLuxuryItems();
+        return ret;
+    }
+
+    @Override
+    public boolean removeLuxuryItem(long id) {
+        boolean ret = LuxuryItemIO.deleteLuxuryItemData(id, mLuxuryWriter);
+        ret = ret && loadAllLuxuryItems();
+        return ret;
     }
 }

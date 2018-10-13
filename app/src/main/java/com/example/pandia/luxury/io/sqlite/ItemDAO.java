@@ -115,6 +115,11 @@ public class ItemDAO {
         return mDB.delete(LUXURYITEM_TABLE_NAME, where , null) > 0;
     }
 
+    public boolean deleteLuxuryItem(String uniqueID){
+        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        return mDB.delete(LUXURYITEM_TABLE_NAME, where , null) > 0;
+    }
+
     public List<LuxuryItem> getAllLuxuryItem() {
         List<LuxuryItem> result = new ArrayList<>();
         Cursor cursor = mDB.query(
@@ -178,7 +183,7 @@ public class ItemDAO {
 
     public LuxuryItem getLuxuryItemByUniqueID(String uniqueID) {
         LuxuryItem item = null;
-        String where = UNIQUE_ID + "=" + uniqueID;
+        String where = UNIQUE_ID + "='" + uniqueID + "'";
         Cursor result = mDB.query(
                 LUXURYITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);
@@ -218,7 +223,7 @@ public class ItemDAO {
     }
 
     public boolean isLuxuryItemExists(String uniqueID) {
-        String where = UNIQUE_ID + "=" + uniqueID;
+        String where = UNIQUE_ID + "='" + uniqueID + "'";
         Cursor result = mDB.query(
                 LUXURYITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);
@@ -261,6 +266,11 @@ public class ItemDAO {
         return mDB.delete(BORROWITEM_TABLE_NAME, where , null) > 0;
     }
 
+    public boolean deleteBorrowItem(String uniqueID){
+        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        return mDB.delete(BORROWITEM_TABLE_NAME, where , null) > 0;
+    }
+
     public List<BorrowItem> getAllBorrowItem() {
         List<BorrowItem> result = new ArrayList<>();
         Cursor cursor = mDB.query(
@@ -294,7 +304,7 @@ public class ItemDAO {
 
     public BorrowItem getBorrowItemByUniqueID(String uniqueID) {
         BorrowItem item = null;
-        String where = UNIQUE_ID + "=" + uniqueID;
+        String where = UNIQUE_ID + "='" + uniqueID + "'";
         Cursor result = mDB.query(
                 BORROWITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);
@@ -333,7 +343,7 @@ public class ItemDAO {
     }
 
     public boolean isBorrowItemExists(String uniqueID) {
-        String where = UNIQUE_ID + "=" + uniqueID;
+        String where = UNIQUE_ID + "='" + uniqueID + "'";
         Cursor result = mDB.query(
                 BORROWITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);

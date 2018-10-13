@@ -10,6 +10,8 @@ public interface ILuxuryListPresenter {
     public void onItemSwiped(int row);
     public void onListScrolledDown();
     public void onListScrolledUp();
+    public void deleteLuxuryItem(String uniqueID);
+    public void deleteLuxuryItem(long id);
 
     // for model callback
     public void onListUpdated();
