@@ -28,7 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".QRCodeScannerActivity" />
-        <activity android:name=".QRCodeEncodeActivity"></activity>
+        <activity android:name=".QRCodeEncodeActivity" />
+        <activity android:name=".LuxuryListViewActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.pandia.luxury.interfaces;
+package com.example.pandia.luxury.io.interfaces;
 
 import java.util.Collection;
 
