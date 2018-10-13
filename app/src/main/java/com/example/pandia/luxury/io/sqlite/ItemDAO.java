@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.pandia.luxury.data.BorrowItem;
 import com.example.pandia.luxury.data.LuxuryItem;
-import com.example.pandia.luxury.data.LuxuryItemConstants;
+import com.example.pandia.luxury.constants.LuxuryItemConstants;
 import com.example.pandia.luxury.util.Util;
 
 import java.util.ArrayList;
@@ -66,6 +66,11 @@ public class ItemDAO {
         mDB = LuxItemSQLiteHelper.getLuxItemDatabase(context);
     }
 
+    public void clearAllDBContent() {
+        mDB.execSQL("DROP TABLE IF EXISTS " + ItemDAO.LUXURYITEM_TABLE_NAME);
+        mDB.execSQL("DROP TABLE IF EXISTS " + ItemDAO.BORROWITEM_TABLE_NAME);
+    }
+
     public void closeDB() {
         if (mDB.isOpen()) {
             mDB.close();
@@ -77,10 +82,10 @@ public class ItemDAO {
         contentValues.put(UNIQUE_ID, item.getUniqueID());
         contentValues.put(ITEM_NAME, item.getItemName());
         contentValues.put(ITEM_PRICE, item.getPrice());
-        contentValues.put(PURCHASED_DATE, Util.convertToDateString(item.getPurchasedDate()));
+        contentValues.put(PURCHASED_DATE, Util.convertDateToString(item.getPurchasedDate()));
         contentValues.put(ITEM_TYPE, item.getItemType().getValue());
         contentValues.put(EXTRA_DATA, Util.convertMapToJSonString(item.getAllExtraData()));
-        contentValues.put(CREATE_DATE, Util.convertToLocalDateTimeString(item.getCreateDate()));
+        contentValues.put(CREATE_DATE, Util.convertLocalDateTimeToString(item.getCreateDate()));
 
         long id = mDB.insert(LUXURYITEM_TABLE_NAME, null, contentValues);
         item.setDataBaseID(id);
@@ -93,10 +98,10 @@ public class ItemDAO {
         contentValues.put(UNIQUE_ID, item.getUniqueID());
         contentValues.put(ITEM_NAME, item.getItemName());
         contentValues.put(ITEM_PRICE, item.getPrice());
-        contentValues.put(PURCHASED_DATE, Util.convertToDateString(item.getPurchasedDate()));
+        contentValues.put(PURCHASED_DATE, Util.convertDateToString(item.getPurchasedDate()));
         contentValues.put(ITEM_TYPE, item.getItemType().getValue());
         contentValues.put(EXTRA_DATA, Util.convertMapToJSonString(item.getAllExtraData()));
-        contentValues.put(CREATE_DATE, Util.convertToLocalDateTimeString(item.getCreateDate()));
+        contentValues.put(CREATE_DATE, Util.convertLocalDateTimeToString(item.getCreateDate()));
         String where = KEY_ID + "=" + item.getDataBaseID();
 
         //TODO: Update Image DB if UniqueID is changed.
@@ -116,8 +121,10 @@ public class ItemDAO {
                 LUXURYITEM_TABLE_NAME, null, null, null,
                 null, null, null, null);
 
-        while (cursor.moveToNext()) {
-            result.add(getLuxuryItemRecord(cursor));
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(getLuxuryItemRecord(cursor));
+            } while (cursor.moveToNext());
         }
 
         cursor.close();
@@ -143,8 +150,11 @@ public class ItemDAO {
         Cursor result = mDB.query(
                 LUXURYITEM_TABLE_NAME, null, null, null,
                 null, null, null, limit);
-        while (result.moveToFirst()) {
-            rangeItems.add(getLuxuryItemRecord(result));
+
+        if (result.moveToFirst()) {
+            do {
+                rangeItems.add(getLuxuryItemRecord(result));
+            } while (result.moveToNext());
         }
 
         result.close();
@@ -189,7 +199,7 @@ public class ItemDAO {
         result.setItemName(cursor.getString(cursor.getColumnIndex(ITEM_NAME)));
         result.setPrice(cursor.getInt(cursor.getColumnIndex(ITEM_PRICE)));
         result.setPurchasedDate(Util.convertStringToDate(cursor.getString(cursor.getColumnIndex(PURCHASED_DATE))));
-        result.setItemType(LuxuryItemConstants.LuxuryType.values()[cursor.getInt(cursor.getColumnIndex(ITEM_TYPE))]);
+        result.setItemType(LuxuryItemConstants.LuxuryType.valueOf(cursor.getInt(cursor.getColumnIndex(ITEM_TYPE))));
         result.setAllExtraData(Util.convertJSonStringToMap(cursor.getString(cursor.getColumnIndex(EXTRA_DATA))));
         result.setCreateDate(cursor.getString(cursor.getColumnIndex(CREATE_DATE)));
 
@@ -223,9 +233,9 @@ public class ItemDAO {
         contentValues.put(UNIQUE_ID, item.getUniqueID());
         contentValues.put(BORROWER_NAME, item.getBorrower());
         contentValues.put(BORROW_ITEM_ID, item.getBorrowedItemID());
-        contentValues.put(BORROW_DATE, Util.convertToDateString(item.getBorrowDate()));
-        contentValues.put(RETURN_DATE, Util.convertToDateString(item.getReturnDate()));
-        contentValues.put(CREATE_DATE, Util.convertToLocalDateTimeString(item.getCreateDate()));
+        contentValues.put(BORROW_DATE, Util.convertDateToString(item.getBorrowDate()));
+        contentValues.put(RETURN_DATE, Util.convertDateToString(item.getReturnDate()));
+        contentValues.put(CREATE_DATE, Util.convertLocalDateTimeToString(item.getCreateDate()));
 
         long id = mDB.insert(BORROWITEM_TABLE_NAME, null, contentValues);
         item.setDataBaseID(id);
@@ -238,9 +248,9 @@ public class ItemDAO {
         contentValues.put(UNIQUE_ID, item.getUniqueID());
         contentValues.put(BORROWER_NAME, item.getBorrower());
         contentValues.put(BORROW_ITEM_ID, item.getBorrowedItemID());
-        contentValues.put(BORROW_DATE, Util.convertToDateString(item.getBorrowDate()));
-        contentValues.put(RETURN_DATE, Util.convertToDateString(item.getReturnDate()));
-        contentValues.put(CREATE_DATE, Util.convertToLocalDateTimeString(item.getCreateDate()));
+        contentValues.put(BORROW_DATE, Util.convertDateToString(item.getBorrowDate()));
+        contentValues.put(RETURN_DATE, Util.convertDateToString(item.getReturnDate()));
+        contentValues.put(CREATE_DATE, Util.convertLocalDateTimeToString(item.getCreateDate()));
         String where = KEY_ID + "=" + item.getDataBaseID();
 
         return mDB.update(BORROWITEM_TABLE_NAME, contentValues, where, null) > 0;
@@ -257,8 +267,10 @@ public class ItemDAO {
                 BORROWITEM_TABLE_NAME, null, null, null,
                 null, null, null, null);
 
-        while (cursor.moveToNext()) {
-            result.add(getBorrowItemRecord(cursor));
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(getBorrowItemRecord(cursor));
+            } while (cursor.moveToNext());
         }
 
         cursor.close();
@@ -335,23 +347,23 @@ public class ItemDAO {
         LuxuryItem item1 = new LuxuryItem("UNINIT_ITEM");
         item1.setItemName("Item 1");
         item1.setPrice(100);
-        item1.setPurchasedDate(Util.convertStringToDate("2018-03-01 00:00:00"));
-        item1.setItemType(LuxuryItemConstants.LuxuryType.values()[10]);
-        item1.setCreateDate("2018-03-01 00:00:00");
+        item1.setPurchasedDate(Util.convertStringToDate("2018-03-01,00:00:00"));
+        item1.setItemType(LuxuryItemConstants.LuxuryType.values()[1]);
+        item1.setCreateDate("2018-03-01,00:00:00");
 
         LuxuryItem item2 = new LuxuryItem("UNINIT_ITEM");
         item2.setItemName("Item 2");
         item2.setPrice(200);
-        item2.setPurchasedDate(Util.convertStringToDate("2018-04-01 00:00:00"));
-        item2.setItemType(LuxuryItemConstants.LuxuryType.values()[20]);
-        item2.setCreateDate("2018-04-01 00:00:00");
+        item2.setPurchasedDate(Util.convertStringToDate("2018-04-01,00:00:00"));
+        item2.setItemType(LuxuryItemConstants.LuxuryType.values()[2]);
+        item2.setCreateDate("2018-04-01,00:00:00");
 
         LuxuryItem item3 = new LuxuryItem("UNINIT_ITEM");
         item3.setItemName("Item 3");
         item3.setPrice(300);
-        item3.setPurchasedDate(Util.convertStringToDate("2018-05-01 00:00:00"));
-        item3.setItemType(LuxuryItemConstants.LuxuryType.values()[30]);
-        item2.setCreateDate("2018-05-01 00:00:00");
+        item3.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item3.setItemType(LuxuryItemConstants.LuxuryType.values()[3]);
+        item2.setCreateDate("2018-05-01,00:00:00");
 
         insertLuxuryItem(item1);
         insertLuxuryItem(item2);
@@ -360,19 +372,19 @@ public class ItemDAO {
 
     public void genFakeBorrowItemData() {
         BorrowItem item1 = new BorrowItem("BORROW1", "lux1");
-        item1.setBorrowDate(Util.convertStringToDate("2018-01-01 00:00:00"));
-        item1.setReturnDate(Util.convertStringToDate("2018-02-01 00:00:00"));
-        item1.setCreateDate("2018-04-01 00:00:00");
+        item1.setBorrowDate(Util.convertStringToDate("2018-01-01,00:00:00"));
+        item1.setReturnDate(Util.convertStringToDate("2018-02-01,00:00:00"));
+        item1.setCreateDate("2018-04-01,00:00:00");
 
         BorrowItem item2 = new BorrowItem("BORROW2", "lux2");
-        item2.setBorrowDate(Util.convertStringToDate("2018-02-01 00:00:00"));
-        item2.setReturnDate(Util.convertStringToDate("2018-03-01 00:00:00"));
-        item2.setCreateDate("2018-05-01 00:00:00");
+        item2.setBorrowDate(Util.convertStringToDate("2018-02-01,00:00:00"));
+        item2.setReturnDate(Util.convertStringToDate("2018-03-01,00:00:00"));
+        item2.setCreateDate("2018-05-01,00:00:00");
 
         BorrowItem item3 = new BorrowItem("BORROW3", "lux3");
-        item3.setBorrowDate(Util.convertStringToDate("2018-03-01 00:00:00"));
-        item3.setReturnDate(Util.convertStringToDate("2018-04-01 00:00:00"));
-        item3.setCreateDate("2018-06-01 00:00:00");
+        item3.setBorrowDate(Util.convertStringToDate("2018-03-01,00:00:00"));
+        item3.setReturnDate(Util.convertStringToDate("2018-04-01,00:00:00"));
+        item3.setCreateDate("2018-06-01,00:00:00");
 
         insertBorrowItem(item1);
         insertBorrowItem(item2);

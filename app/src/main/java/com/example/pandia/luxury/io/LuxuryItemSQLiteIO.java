@@ -2,6 +2,7 @@ package com.example.pandia.luxury.io;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.example.pandia.luxury.data.LuxuryItem;
 import com.example.pandia.luxury.io.interfaces.IRangeReadable;
@@ -23,6 +24,11 @@ public class LuxuryItemSQLiteIO implements IWritable<LuxuryItem>, IReadable<Luxu
         mContext = context;
         mItemDAO = new ItemDAO(mContext);
         mItemImageDAO = new ItemImageDAO(mContext);
+
+        //TODO: Remove test code
+        if (mItemDAO.getLuxuryItemCount() == 0) {
+            mItemDAO.genFakeLuxuryItemData();
+        }
     }
 
     @Override
@@ -99,10 +105,11 @@ public class LuxuryItemSQLiteIO implements IWritable<LuxuryItem>, IReadable<Luxu
     public Collection<LuxuryItem> readRangeEntries(long start, long end) {
         ArrayList<LuxuryItem> ret = mItemDAO.getRangeLuxuryItem(start, end);
 
+        Log.i("pandia", "Image count:" + mItemImageDAO.getLuxuryItemImageCount());
         //TODO: maybe load in thread ?
-        for (LuxuryItem item : ret) {
+        /*for (LuxuryItem item : ret) {
             item.setItemImage(mItemImageDAO.getLuxuryItemImageByUniqueID(item.getUniqueID()));
-        }
+        }*/
 
         return ret;
     }

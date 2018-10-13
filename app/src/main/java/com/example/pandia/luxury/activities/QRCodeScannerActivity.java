@@ -1,4 +1,4 @@
-package com.example.pandia.luxury;
+package com.example.pandia.luxury.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.example.pandia.luxury.R;
 import com.google.zxing.Result;
 
 public class QRCodeScannerActivity extends AppCompatActivity {

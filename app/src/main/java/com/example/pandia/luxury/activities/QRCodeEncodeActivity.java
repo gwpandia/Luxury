@@ -1,6 +1,5 @@
-package com.example.pandia.luxury;
+package com.example.pandia.luxury.activities;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.pandia.luxury.R;
 import com.example.pandia.luxury.util.QRCodeUtil;
 
 public class QRCodeEncodeActivity extends AppCompatActivity {

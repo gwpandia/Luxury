@@ -17,9 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.MainActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="Luxury">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,9 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".QRCodeScannerActivity" />
-        <activity android:name=".QRCodeEncodeActivity" />
-        <activity android:name=".LuxuryListViewActivity"></activity>
+        <activity android:name=".activities.QRCodeScannerActivity" />
+        <activity android:name=".activities.QRCodeEncodeActivity" />
+        <activity android:name=".activities.LuxuryListViewActivity"></activity>
     </application>
 
 </manifest>

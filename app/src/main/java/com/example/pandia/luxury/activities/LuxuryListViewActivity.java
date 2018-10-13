@@ -1,12 +1,12 @@
-package com.example.pandia.luxury;
+package com.example.pandia.luxury.activities;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Filter;
@@ -17,28 +17,43 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pandia.luxury.R;
+import com.example.pandia.luxury.configs.Config;
+import com.example.pandia.luxury.constants.LuxuryItemConstants;
+import com.example.pandia.luxury.data.LuxuryItem;
+import com.example.pandia.luxury.interfaces.ILuxuryListModel;
+import com.example.pandia.luxury.interfaces.ILuxuryListPresenter;
+import com.example.pandia.luxury.interfaces.ILuxuryListView;
+import com.example.pandia.luxury.models.LuxuryListModel;
+import com.example.pandia.luxury.presenters.LuxuryListPresenter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LuxuryListViewActivity extends AppCompatActivity {
+public class LuxuryListViewActivity extends AppCompatActivity implements ILuxuryListView {
 
     private ListView mListView;
     private TextView mShowText;
     private Button mButton;
     private SearchView mSearchView;
-    LuxuryItemAdapter mListItemAdapter;
+    private LuxuryItemAdapter mListItemAdapter;
 
-    String[] names = new String[] { "今天", "明天", "後天" };
-    String[] lists = new String[] { "Today", "Tomorrow", "Acuired" };
+    //TODO: Where to put lifecycle ?
+    private ILuxuryListModel mListModel;
+    private ILuxuryListPresenter mListPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_luxury_list_view);
 
+        mListPresenter = new LuxuryListPresenter();
+        mListModel = LuxuryListModel.createLuxuryListModel(getApplicationContext(), Config.DEFAULT_DATA_IO, mListPresenter);
+        mListPresenter.setView(this);
+
         mListView = findViewById(R.id.LuxuryListViewActivity_ListView);
-        mListItemAdapter = new LuxuryItemAdapter(this, Arrays.asList(names));
+        mListItemAdapter = new LuxuryItemAdapter(this);
         mListView.setAdapter(mListItemAdapter);
         mListView.setTextFilterEnabled(true);
         mListView.setOnItemClickListener((parent, view, position, id) ->
@@ -49,6 +64,8 @@ public class LuxuryListViewActivity extends AppCompatActivity {
         mSearchView.setFocusable(false);
         setSearchFunction();
 
+        //Todo: Remove test code
+        mListPresenter.onListScrolledUp();
     }
 
     private void setSearchFunction() {
@@ -67,26 +84,39 @@ public class LuxuryListViewActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void updateListViewItems(ArrayList<LuxuryItem> luxuryItems) {
+        mListItemAdapter.setDisplayItems(luxuryItems);
+        mListItemAdapter.notifyDataSetChanged();
+    }
+
     public class LuxuryItemAdapter extends BaseAdapter implements Filterable {
         private LayoutInflater mInflater;
-        List<String> mOriginalItem;
-        List<String> mItem;
+        private ArrayList<LuxuryItem> mOriginalItems;
+        private ArrayList<LuxuryItem> mItems;
 
-        public LuxuryItemAdapter(Context context, List<String> item) {
+        public LuxuryItemAdapter(Context context) {
             mInflater = LayoutInflater.from(context);
-            mItem = item;
+            mItems = new ArrayList<LuxuryItem>();
+        }
+
+        public void setDisplayItems(ArrayList<LuxuryItem> items) {
+            if (items != null) {
+                Log.i("pandia", "DisplayItem size :" + items.size());
+                mItems = items;
+            }
         }
 
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
-            return mItem.size();
+            return mItems.size();
         }
 
         @Override
         public Object getItem(int position) {
             // TODO Auto-generated method stub
-            return mItem.get(position);
+            return mItems.get(position);
         }
 
         @Override
@@ -104,9 +134,9 @@ public class LuxuryListViewActivity extends AppCompatActivity {
             TextView itemName = (TextView) convertView.findViewById(R.id.Luxury_Item_Name);
             TextView itemSubname = (TextView) convertView.findViewById(R.id.Luxury_Item_SubName);
 
-            //itemImg.setImageResource(logos[position]);
-            itemName.setText(mItem.get(position));
-            //itemSubname.setText(lists[]);
+            itemImg.setImageBitmap(mItems.get(position).getItemImage());
+            itemName.setText(mItems.get(position).getItemName());
+            itemSubname.setText(LuxuryItemConstants.LUXURY_TYPE_DISPLAY_NAME.get(mItems.get(position).getItemType()));
 
             return convertView;
         }
@@ -118,17 +148,18 @@ public class LuxuryListViewActivity extends AppCompatActivity {
                 protected FilterResults performFiltering(CharSequence constraint) {
                     constraint = constraint.toString();
                     FilterResults result = new FilterResults();
-                    if (mOriginalItem == null) {
+                    if (mOriginalItems == null) {
                         synchronized (this){
-                            mOriginalItem = new ArrayList<String>(Arrays.asList(names));
+                            mOriginalItems = new ArrayList<LuxuryItem>(mItems);
                         }
                     }
                     if (constraint != null && constraint.toString().length() > 0) {
-                        ArrayList<String> filteredItem = new ArrayList<String>();
-                        for (int i = 0; i < mOriginalItem.size(); ++i) {
-                            String title = mOriginalItem.get(i);
-                            if (title.contains(constraint)) {
-                                filteredItem.add(title);
+                        ArrayList<LuxuryItem> filteredItem = new ArrayList<LuxuryItem>();
+                        for (int i = 0; i < mOriginalItems.size(); ++i) {
+                            String title = mOriginalItems.get(i).getItemName();
+                            String typeName = LuxuryItemConstants.LUXURY_TYPE_DISPLAY_NAME.get(mOriginalItems.get(i).getItemType());
+                            if (title.contains(constraint) || typeName.contains(constraint)) {
+                                filteredItem.add(mOriginalItems.get(i));
                             }
                         }
                         result.count = filteredItem.size();
@@ -136,10 +167,9 @@ public class LuxuryListViewActivity extends AppCompatActivity {
                     }
                     else {
                         synchronized (this) {
-                            ArrayList<String> list = new ArrayList<String>(mOriginalItem);
+                            ArrayList<LuxuryItem> list = new ArrayList<LuxuryItem>(mOriginalItems);
                             result.values = list;
                             result.count = list.size();
-
                         }
                     }
 
@@ -148,7 +178,7 @@ public class LuxuryListViewActivity extends AppCompatActivity {
 
                 @Override
                 protected void publishResults(CharSequence constraint, FilterResults results) {
-                    mItem = (ArrayList<String>)results.values;
+                    mItems = (ArrayList<LuxuryItem>)results.values;
                     if (results.count > 0) {
                         notifyDataSetChanged();
                     }

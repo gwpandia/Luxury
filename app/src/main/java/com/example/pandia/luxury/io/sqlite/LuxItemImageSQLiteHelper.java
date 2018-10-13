@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class LuxItemImageSQLiteHelper extends SQLiteOpenHelper {
 
     public static final String LUX_ITEM_IMAGE_DATABASE_NAME = "myluxuryimg.db";
-    public static final int LUX_ITEM_IMAGE_DATABASE_VERSION = 1;
+    public static final int LUX_ITEM_IMAGE_DATABASE_VERSION = 3;
     private static SQLiteDatabase mLuxItemImageDatabase;
 
     public LuxItemImageSQLiteHelper(Context context, String name, CursorFactory factory,
@@ -22,20 +22,20 @@ public class LuxItemImageSQLiteHelper extends SQLiteOpenHelper {
                     null, LUX_ITEM_IMAGE_DATABASE_VERSION).getWritableDatabase();
         }
 
+        //mLuxItemImageDatabase.execSQL("DROP TABLE IF EXISTS " + ItemImageDAO.LUXURYITEMIMAGE_TABLE_NAME);
+
         return mLuxItemImageDatabase;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(ItemDAO.CREATE_LUXURYITEM_TABLE);
-        db.execSQL(ItemDAO.CREATE_BORROWITEM_TABLE);
+        db.execSQL(ItemImageDAO.CREATE_LUXURYITEMIMAGE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO: no patch here !?
-        db.execSQL("DROP TABLE IF EXISTS " + ItemDAO.LUXURYITEM_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ItemDAO.BORROWITEM_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + ItemImageDAO.LUXURYITEMIMAGE_TABLE_NAME);
         onCreate(db);
     }
 }

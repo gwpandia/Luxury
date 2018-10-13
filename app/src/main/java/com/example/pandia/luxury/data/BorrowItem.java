@@ -65,8 +65,8 @@ public class BorrowItem  extends BaseItem{
     public String toString() {
         String ret = "[BorrowItem] dbID: " + mDataBaseID + ", UniqueID: " + mUniqueID +
                 ", Borrower: " + mBorrower + ", BorrowItemID: " + mBorrowedItemID +
-                ", BorrowDate: " + Util.convertToDateString(mBorrowDate) +
-                ", ReturnDate: " + Util.convertToDateString(mReturnDate);
+                ", BorrowDate: " + Util.convertDateToString(mBorrowDate) +
+                ", ReturnDate: " + Util.convertDateToString(mReturnDate);
 
         return ret;
     }
@@ -74,6 +74,6 @@ public class BorrowItem  extends BaseItem{
     @Override
     protected void updateUniqueID() {
         mUniqueID = ItemUtil.generateBorrowUniqueID(mBorrower, mBorrowedItemID,
-                Util.convertToLocalDateTimeString(mCreateDate));
+                Util.convertLocalDateTimeToString(mCreateDate));
     }
 }

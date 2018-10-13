@@ -1,6 +1,9 @@
 package com.example.pandia.luxury.data;
 
 import android.graphics.Bitmap;
+
+import com.example.pandia.luxury.R;
+import com.example.pandia.luxury.constants.LuxuryItemConstants;
 import com.example.pandia.luxury.util.ItemUtil;
 import com.example.pandia.luxury.util.Util;
 
@@ -115,7 +118,7 @@ public class LuxuryItem extends BaseItem {
         String ret =
                 "[LuxuryItem] dbID: " + mDataBaseID + ", UniqueID: " + mUniqueID +
                 ", ItemName: " + mItemName + ", Price: " + mPrice +
-                ", PurchaseDate: " + Util.convertToDateString(mPurchasedDate) +
+                ", PurchaseDate: " + Util.convertDateToString(mPurchasedDate) +
                 ", ItemType: " + mItemType + ", HasImage:" + ((mItemImage != null) ? "true": "false");
 
         String extraData = ", ExtraData: [";
@@ -135,6 +138,6 @@ public class LuxuryItem extends BaseItem {
     @Override
     protected void updateUniqueID() {
         mUniqueID = ItemUtil.generateItemUniqueID(mItemName, mItemType,
-                Util.convertToLocalDateTimeString(mCreateDate));
+                Util.convertLocalDateTimeToString(mCreateDate));
     }
 }

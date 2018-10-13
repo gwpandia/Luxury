@@ -36,7 +36,7 @@ public class Util {
         return date;
     }
 
-    public static String convertToDateString(Date date) {
+    public static String convertDateToString(Date date) {
         if (date == null) {
             return "";
         }
@@ -46,7 +46,12 @@ public class Util {
         return currentDate;
     }
 
-    public static String convertToLocalDateTimeString(LocalDateTime localDateTime){
+    public static LocalDateTime convertStringToLocalDateTime(String string) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return LocalDateTime.parse(string, dtf);
+    }
+
+    public static String convertLocalDateTimeToString(LocalDateTime localDateTime){
         if (localDateTime == null) {
             return "";
         }
@@ -57,7 +62,7 @@ public class Util {
 
     public static String getCurrentDateString(){
         LocalDateTime now = LocalDateTime.now();
-        return convertToLocalDateTimeString(now);
+        return convertLocalDateTimeToString(now);
     }
 
     public static String hashText(String plainText) {

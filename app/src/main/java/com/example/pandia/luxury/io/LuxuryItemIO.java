@@ -28,16 +28,19 @@ public class LuxuryItemIO {
         if (reader == null) {
             return null;
         }
-        return readRangeLuxuryData(0, reader.entrySize(), reader);
+        return readRangeLuxuryData(0, reader.entrySize(), reader, true);
     }
 
-    public static ArrayList<LuxuryItem> readRangeLuxuryData(long start, long end, IRangeReadable<LuxuryItem> reader) {
+    public static ArrayList<LuxuryItem> readRangeLuxuryData(long start, long end, IRangeReadable<LuxuryItem> reader, boolean clearOld) {
         if (reader == null || end < start) {
             return null;
         }
 
         ArrayList<LuxuryItem> allData = new ArrayList<LuxuryItem>();
         reader.initializeReader();
+        if (clearOld) {
+            allData.clear();
+        }
         allData.addAll(reader.readRangeEntries(start, end));
         reader.finishReader();
 

@@ -1,4 +1,4 @@
-package com.example.pandia.luxury.data;
+package com.example.pandia.luxury.constants;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -104,6 +104,17 @@ public class LuxuryItemConstants {
         LENS(110);
 
         private final int value;
+        private static Map map = new HashMap<>();
+
+        static {
+            for (LuxuryType luxuryType : LuxuryType.values()) {
+                map.put(luxuryType.value, luxuryType);
+            }
+        }
+
+        public static LuxuryType valueOf(int luxuryType) {
+            return (LuxuryType) map.get(luxuryType);
+        }
 
         LuxuryType(int value) {
             this.value = value;

@@ -1,4 +1,4 @@
-package com.example.pandia.luxury;
+package com.example.pandia.luxury.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -34,6 +34,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+
+import com.example.pandia.luxury.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

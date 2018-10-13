@@ -43,8 +43,7 @@ abstract class BaseItem {
 
     public void setCreateDate(String createDate) {
         if (Util.isValidString(createDate)) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd,HH:mm:ss");
-            mCreateDate = LocalDateTime.parse(createDate, dtf);
+            mCreateDate = Util.convertStringToLocalDateTime(createDate);
         }
     }
 

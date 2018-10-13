@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class LuxItemSQLiteHelper extends SQLiteOpenHelper {
 
-    public static final String LUX_ITEM_DATABASE_NAME = "myluxury.db";
-    public static final int LUX_ITEM_DATABASE_VERSION = 1;
+    public static final String LUX_ITEM_DATABASE_NAME = "myluxury2.db";
+    public static final int LUX_ITEM_DATABASE_VERSION = 2;
     private static SQLiteDatabase mLuxItemDatabase;
 
     public LuxItemSQLiteHelper(Context context, String name, CursorFactory factory,
@@ -20,6 +20,9 @@ public class LuxItemSQLiteHelper extends SQLiteOpenHelper {
         if (mLuxItemDatabase == null || !mLuxItemDatabase.isOpen()) {
             mLuxItemDatabase = new LuxItemSQLiteHelper(context, LUX_ITEM_DATABASE_NAME,
                     null, LUX_ITEM_DATABASE_VERSION).getWritableDatabase();
+
+            //mLuxItemDatabase.execSQL(ItemDAO.CREATE_LUXURYITEM_TABLE);
+            //mLuxItemDatabase.execSQL(ItemDAO.CREATE_BORROWITEM_TABLE);
         }
 
         return mLuxItemDatabase;

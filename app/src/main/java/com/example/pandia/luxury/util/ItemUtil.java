@@ -2,14 +2,12 @@ package com.example.pandia.luxury.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 
-import com.example.pandia.luxury.data.LuxuryItemConstants;
-import com.example.pandia.luxury.data.LuxuryItemConstants.LuxuryType;
+import com.example.pandia.luxury.constants.LuxuryItemConstants;
+import com.example.pandia.luxury.constants.LuxuryItemConstants.LuxuryType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class ItemUtil {
     public static String generateItemUniqueID(String itemName, LuxuryType type, String createDate){

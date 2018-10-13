@@ -6,14 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 
-import com.example.pandia.luxury.data.BorrowItem;
-import com.example.pandia.luxury.data.LuxuryItem;
-import com.example.pandia.luxury.data.LuxuryItemConstants;
 import com.example.pandia.luxury.util.ItemUtil;
-import com.example.pandia.luxury.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ItemImageDAO {
