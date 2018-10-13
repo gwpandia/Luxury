@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Filter;
@@ -17,6 +20,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.daimajia.swipe.SimpleSwipeListener;
+import com.daimajia.swipe.SwipeLayout;
+import com.daimajia.swipe.adapters.BaseSwipeAdapter;
+import com.daimajia.swipe.util.Attributes;
 import com.example.pandia.luxury.R;
 import com.example.pandia.luxury.configs.Config;
 import com.example.pandia.luxury.constants.LuxuryItemConstants;
@@ -64,6 +73,41 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
         mSearchView.setFocusable(false);
         setSearchFunction();
 
+        mListItemAdapter.setMode(Attributes.Mode.Single);
+        mListView.setOnItemClickListener((parent, view, position, id) -> ((SwipeLayout)(mListView.getChildAt(position - mListView.getFirstVisiblePosition()))).open(true));
+        mListView.setOnTouchListener((v, event) -> {
+            Log.e("ListView", "OnTouch");
+            return false;
+        });
+        mListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            Toast.makeText(LuxuryListViewActivity.this, "OnItemLongClickListener", Toast.LENGTH_SHORT).show();
+            return true;
+        });
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                Log.e("ListView", "onScrollStateChanged");
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+
+        mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("ListView", "onItemSelected:" + position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.e("ListView", "onNothingSelected:");
+            }
+        });
+
+
         //Todo: Remove test code
         mListPresenter.onListScrolledUp();
     }
@@ -90,14 +134,16 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
         mListItemAdapter.notifyDataSetChanged();
     }
 
-    public class LuxuryItemAdapter extends BaseAdapter implements Filterable {
+    public class LuxuryItemAdapter extends BaseSwipeAdapter implements Filterable {
         private LayoutInflater mInflater;
         private ArrayList<LuxuryItem> mOriginalItems;
         private ArrayList<LuxuryItem> mItems;
+        private Context mContext;
 
         public LuxuryItemAdapter(Context context) {
             mInflater = LayoutInflater.from(context);
             mItems = new ArrayList<LuxuryItem>();
+            mContext = context;
         }
 
         public void setDisplayItems(ArrayList<LuxuryItem> items) {
@@ -126,10 +172,40 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            convertView = mInflater.inflate(R.layout.luxury_item, null);
+        public int getSwipeLayoutResourceId(int position) {
+            return R.id.Luxury_Item_SwipeLayout;
+        }
 
+        @Override
+        public View generateView(int position, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            View convertView = mInflater.inflate(R.layout.luxury_item, null);
+
+            SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
+            swipeLayout.addSwipeListener(new SimpleSwipeListener() {
+                @Override
+                public void onOpen(SwipeLayout layout) {
+                    //YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.Luxury_Item_Delete_Button));
+                }
+            });
+            swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
+                @Override
+                public void onDoubleClick(SwipeLayout layout, boolean surface) {
+                    Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
+                }
+            });
+            convertView.findViewById(R.id.Luxury_Item_Delete_Button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return convertView;
+        }
+
+        @Override
+        public void fillValues(int position, View convertView) {
             ImageView itemImg = (ImageView) convertView.findViewById(R.id.Luxury_Item_Image);
             TextView itemName = (TextView) convertView.findViewById(R.id.Luxury_Item_Name);
             TextView itemSubname = (TextView) convertView.findViewById(R.id.Luxury_Item_SubName);
@@ -137,8 +213,6 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
             itemImg.setImageBitmap(mItems.get(position).getItemImage());
             itemName.setText(mItems.get(position).getItemName());
             itemSubname.setText(LuxuryItemConstants.LUXURY_TYPE_DISPLAY_NAME.get(mItems.get(position).getItemType()));
-
-            return convertView;
         }
 
         @Override
@@ -158,7 +232,8 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
                         for (int i = 0; i < mOriginalItems.size(); ++i) {
                             String title = mOriginalItems.get(i).getItemName();
                             String typeName = LuxuryItemConstants.LUXURY_TYPE_DISPLAY_NAME.get(mOriginalItems.get(i).getItemType());
-                            if (title.contains(constraint) || typeName.contains(constraint)) {
+                            if (title.toLowerCase().contains(((String) constraint).toLowerCase())
+                                || typeName.toLowerCase().contains(((String) constraint).toLowerCase())) {
                                 filteredItem.add(mOriginalItems.get(i));
                             }
                         }

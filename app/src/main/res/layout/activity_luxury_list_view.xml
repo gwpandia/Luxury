@@ -26,19 +26,7 @@
 
     <ListView
         android:id="@+id/LuxuryListViewActivity_ListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/LuxuryListViewActivity_Show"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="" />
-
-    <Button
-        android:id="@+id/LuxuryListViewActivity_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="執行" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

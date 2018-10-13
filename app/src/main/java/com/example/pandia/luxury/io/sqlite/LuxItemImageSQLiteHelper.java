@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class LuxItemImageSQLiteHelper extends SQLiteOpenHelper {
 
     public static final String LUX_ITEM_IMAGE_DATABASE_NAME = "myluxuryimg.db";
-    public static final int LUX_ITEM_IMAGE_DATABASE_VERSION = 3;
+    public static final int LUX_ITEM_IMAGE_DATABASE_VERSION = 1;
     private static SQLiteDatabase mLuxItemImageDatabase;
 
     public LuxItemImageSQLiteHelper(Context context, String name, CursorFactory factory,

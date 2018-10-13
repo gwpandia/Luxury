@@ -363,11 +363,67 @@ public class ItemDAO {
         item3.setPrice(300);
         item3.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item3.setItemType(LuxuryItemConstants.LuxuryType.values()[3]);
-        item2.setCreateDate("2018-05-01,00:00:00");
+        item3.setCreateDate("2018-05-01,00:00:00");
+
+        LuxuryItem item4 = new LuxuryItem("UNINIT_ITEM");
+        item4.setItemName("Item 4");
+        item4.setPrice(400);
+        item4.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item4.setItemType(LuxuryItemConstants.LuxuryType.values()[4]);
+        item4.setCreateDate("2018-05-01,00:00:00");
+
+        LuxuryItem item5 = new LuxuryItem("UNINIT_ITEM");
+        item5.setItemName("Item 5");
+        item5.setPrice(500);
+        item5.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item5.setItemType(LuxuryItemConstants.LuxuryType.values()[5]);
+        item5.setCreateDate("2018-05-01,00:00:00");
+
+        LuxuryItem item6 = new LuxuryItem("UNINIT_ITEM");
+        item6.setItemName("Item 6");
+        item6.setPrice(400);
+        item6.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item6.setItemType(LuxuryItemConstants.LuxuryType.values()[6]);
+        item6.setCreateDate("2018-05-01,00:00:00");
+
+        LuxuryItem item7 = new LuxuryItem("UNINIT_ITEM");
+        item7.setItemName("Item 7");
+        item7.setPrice(700);
+        item7.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item7.setItemType(LuxuryItemConstants.LuxuryType.values()[7]);
+        item7.setCreateDate("2018-05-01,00:00:00");
+
+        LuxuryItem item8 = new LuxuryItem("UNINIT_ITEM");
+        item8.setItemName("Item 8");
+        item8.setPrice(800);
+        item8.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item8.setItemType(LuxuryItemConstants.LuxuryType.values()[8]);
+        item8.setCreateDate("2018-05-01,00:00:00");
+
+        LuxuryItem item9 = new LuxuryItem("UNINIT_ITEM");
+        item9.setItemName("Item 9");
+        item9.setPrice(900);
+        item9.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item9.setItemType(LuxuryItemConstants.LuxuryType.values()[9]);
+        item9.setCreateDate("2018-05-01,00:00:00");
+
+        LuxuryItem item10 = new LuxuryItem("UNINIT_ITEM");
+        item10.setItemName("Item 10");
+        item10.setPrice(1000);
+        item10.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
+        item10.setItemType(LuxuryItemConstants.LuxuryType.values()[10]);
+        item10.setCreateDate("2018-05-01,00:00:00");
 
         insertLuxuryItem(item1);
         insertLuxuryItem(item2);
         insertLuxuryItem(item3);
+        insertLuxuryItem(item4);
+        insertLuxuryItem(item5);
+        insertLuxuryItem(item6);
+        insertLuxuryItem(item7);
+        insertLuxuryItem(item8);
+        insertLuxuryItem(item9);
+        insertLuxuryItem(item10);
     }
 
     public void genFakeBorrowItemData() {

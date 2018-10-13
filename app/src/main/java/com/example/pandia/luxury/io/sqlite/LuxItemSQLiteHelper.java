@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class LuxItemSQLiteHelper extends SQLiteOpenHelper {
 
-    public static final String LUX_ITEM_DATABASE_NAME = "myluxury2.db";
-    public static final int LUX_ITEM_DATABASE_VERSION = 2;
+    public static final String LUX_ITEM_DATABASE_NAME = "myluxury.db";
+    public static final int LUX_ITEM_DATABASE_VERSION = 1;
     private static SQLiteDatabase mLuxItemDatabase;
 
     public LuxItemSQLiteHelper(Context context, String name, CursorFactory factory,
