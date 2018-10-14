@@ -50,13 +50,13 @@ public class ItemImageDAO {
         ContentValues contentValues = new ContentValues();
         contentValues.put(UNIQUE_ID, uniqueID);
         contentValues.put(IMAGE_ID, ItemUtil.convertBitmapToByteArray(bitmap));
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
 
         return mDB.update(LUXURYITEMIMAGE_TABLE_NAME, contentValues, where, null) > 0;
     }
 
     public boolean deleteLuxuryItemImage(String uniqueID){
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         return mDB.delete(LUXURYITEMIMAGE_TABLE_NAME, where , null) > 0;
     }
 
@@ -77,7 +77,7 @@ public class ItemImageDAO {
 
     public Bitmap getLuxuryItemImageByUniqueID(String uniqueID) {
         Bitmap bitmap = null;
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         Cursor result = mDB.query(
                 LUXURYITEMIMAGE_TABLE_NAME, null, where, null,
                 null, null, null, null);
@@ -106,7 +106,7 @@ public class ItemImageDAO {
     }
 
     public boolean isLuxuryItemImageExists(String uniqueID) {
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         Cursor result = mDB.query(
                 LUXURYITEMIMAGE_TABLE_NAME, null, where, null,
                 null, null, null, null);

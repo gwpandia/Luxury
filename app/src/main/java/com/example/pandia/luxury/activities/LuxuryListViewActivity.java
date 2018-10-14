@@ -198,7 +198,7 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
                 @Override
                 public void onClick(View view) {
                     //TODO: Why SwipeLayout does not swipe back when item is removed
-                    mListPresenter.deleteLuxuryItem(mItems.get(position).getDataBaseID());
+                    mListPresenter.deleteLuxuryItem(mItems.get(position).getUniqueID());
                     Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
                 }
             });

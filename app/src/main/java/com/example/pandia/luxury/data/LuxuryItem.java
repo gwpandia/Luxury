@@ -42,6 +42,7 @@ public class LuxuryItem extends BaseItem {
     public void setItemName(String itemName) {
         if (Util.isValidString(itemName)) {
             this.mItemName = itemName;
+            //TODO: should update only when store to db
             updateUniqueID();
         }
     }
@@ -78,6 +79,7 @@ public class LuxuryItem extends BaseItem {
 
     public void setItemType(LuxuryItemConstants.LuxuryType itemType) {
         this.mItemType = itemType;
+        //TODO: should update only when store to db
         updateUniqueID();
     }
 

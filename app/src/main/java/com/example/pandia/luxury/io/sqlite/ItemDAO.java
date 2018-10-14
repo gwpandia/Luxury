@@ -116,7 +116,7 @@ public class ItemDAO {
     }
 
     public boolean deleteLuxuryItem(String uniqueID){
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         return mDB.delete(LUXURYITEM_TABLE_NAME, where , null) > 0;
     }
 
@@ -183,7 +183,7 @@ public class ItemDAO {
 
     public LuxuryItem getLuxuryItemByUniqueID(String uniqueID) {
         LuxuryItem item = null;
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         Cursor result = mDB.query(
                 LUXURYITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);
@@ -200,13 +200,13 @@ public class ItemDAO {
         LuxuryItem result = new LuxuryItem("UNINIT_ITEM");
 
         result.setDataBaseID(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
-        result.setUniqueID(cursor.getString(cursor.getColumnIndex(UNIQUE_ID)));
+        result.setCreateDate(cursor.getString(cursor.getColumnIndex(CREATE_DATE)));
         result.setItemName(cursor.getString(cursor.getColumnIndex(ITEM_NAME)));
         result.setPrice(cursor.getInt(cursor.getColumnIndex(ITEM_PRICE)));
         result.setPurchasedDate(Util.convertStringToDate(cursor.getString(cursor.getColumnIndex(PURCHASED_DATE))));
         result.setItemType(LuxuryItemConstants.LuxuryType.valueOf(cursor.getInt(cursor.getColumnIndex(ITEM_TYPE))));
         result.setAllExtraData(Util.convertJSonStringToMap(cursor.getString(cursor.getColumnIndex(EXTRA_DATA))));
-        result.setCreateDate(cursor.getString(cursor.getColumnIndex(CREATE_DATE)));
+        result.setUniqueID(cursor.getString(cursor.getColumnIndex(UNIQUE_ID)));
 
         return result;
     }
@@ -223,7 +223,7 @@ public class ItemDAO {
     }
 
     public boolean isLuxuryItemExists(String uniqueID) {
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         Cursor result = mDB.query(
                 LUXURYITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);
@@ -267,7 +267,7 @@ public class ItemDAO {
     }
 
     public boolean deleteBorrowItem(String uniqueID){
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         return mDB.delete(BORROWITEM_TABLE_NAME, where , null) > 0;
     }
 
@@ -304,7 +304,7 @@ public class ItemDAO {
 
     public BorrowItem getBorrowItemByUniqueID(String uniqueID) {
         BorrowItem item = null;
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         Cursor result = mDB.query(
                 BORROWITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);
@@ -321,12 +321,12 @@ public class ItemDAO {
         BorrowItem result = new BorrowItem("UNINIT_BORROWER", "UNINIT_ITEM");
 
         result.setDataBaseID(cursor.getLong(cursor.getColumnIndex(KEY_ID)));
-        result.setUniqueID(cursor.getString(cursor.getColumnIndex(UNIQUE_ID)));
+        result.setCreateDate(cursor.getString(cursor.getColumnIndex(CREATE_DATE)));
         result.setBorrower(cursor.getString(cursor.getColumnIndex(BORROWER_NAME)));
         result.setBorrowedItemID(cursor.getString(cursor.getColumnIndex(BORROW_ITEM_ID)));
         result.setBorrowDate(Util.convertStringToDate(cursor.getString(cursor.getColumnIndex(BORROW_DATE))));
         result.setReturnDate(Util.convertStringToDate(cursor.getString(cursor.getColumnIndex(RETURN_DATE))));
-        result.setCreateDate(cursor.getString(cursor.getColumnIndex(CREATE_DATE)));
+        result.setUniqueID(cursor.getString(cursor.getColumnIndex(UNIQUE_ID)));
 
         return result;
     }
@@ -343,7 +343,7 @@ public class ItemDAO {
     }
 
     public boolean isBorrowItemExists(String uniqueID) {
-        String where = UNIQUE_ID + "='" + uniqueID + "'";
+        String where = UNIQUE_ID + "=\"" + uniqueID + "\"";
         Cursor result = mDB.query(
                 BORROWITEM_TABLE_NAME, null, where, null,
                 null, null, null, null);

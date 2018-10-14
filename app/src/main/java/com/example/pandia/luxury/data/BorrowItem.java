@@ -29,6 +29,7 @@ public class BorrowItem  extends BaseItem{
     public void setBorrower(String borrower) {
         if (Util.isValidString(borrower)) {
             this.mBorrower = borrower;
+            //TODO: should update only when store to db
             updateUniqueID();
         }
     }
