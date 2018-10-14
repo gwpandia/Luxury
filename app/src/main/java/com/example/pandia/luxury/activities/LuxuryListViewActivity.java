@@ -194,6 +194,12 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
                     Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
                 }
             });
+            swipeLayout.setOnClickListener(new SwipeLayout.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "Click", Toast.LENGTH_SHORT).show();
+                }
+            });
             convertView.findViewById(R.id.Luxury_Item_Delete_Button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
