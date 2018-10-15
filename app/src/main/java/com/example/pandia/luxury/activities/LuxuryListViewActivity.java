@@ -87,6 +87,7 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 Log.e("ListView", "onScrollStateChanged");
+                mListItemAdapter.closeAllItems();
             }
 
             @Override
@@ -131,6 +132,7 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
     @Override
     public void updateListViewItems(ArrayList<LuxuryItem> luxuryItems) {
         mListItemAdapter.setDisplayItems(luxuryItems);
+        mListItemAdapter.closeAllItems();
         mListItemAdapter.notifyDataSetChanged();
     }
 
@@ -191,12 +193,14 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
             swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
                 @Override
                 public void onDoubleClick(SwipeLayout layout, boolean surface) {
+                    mListItemAdapter.closeAllExcept(swipeLayout);
                     Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
                 }
             });
             swipeLayout.setOnClickListener(new SwipeLayout.OnClickListener(){
                 @Override
                 public void onClick(View v) {
+                    mListItemAdapter.closeAllExcept(swipeLayout);
                     Toast.makeText(mContext, "Click", Toast.LENGTH_SHORT).show();
                 }
             });

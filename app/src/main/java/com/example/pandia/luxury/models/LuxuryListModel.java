@@ -1,6 +1,7 @@
 package com.example.pandia.luxury.models;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.pandia.luxury.constants.Constants;
@@ -16,6 +17,17 @@ import com.example.pandia.luxury.io.interfaces.IWritable;
 import java.util.ArrayList;
 
 public class LuxuryListModel implements ILuxuryListModel {
+
+    private enum TaskType {
+        LOAD_RANGE_LUXURY_ITEMS,
+        LOAD_ALL_LUXURY_ITEMS,
+        UNIQUE_KEY_DELETE_LUXURY_ITEM,
+        DBID_DELETE_LUXURY_ITEM
+    }
+
+    private static final String TASK_PARAM_NAME_UNIQUEID = "uniqueID";
+    private static final String TASK_PARAM_NAME_START = "start";
+    private static final String TASK_PARAM_NAME_END = "end";
 
     //TODO: add IO type parameter ?
     public static LuxuryListModel createLuxuryListModel(Context context, Constants.DataIO ioType, ILuxuryListPresenter presenter) {
@@ -45,17 +57,16 @@ public class LuxuryListModel implements ILuxuryListModel {
     private IWritable<LuxuryItem> mLuxuryWriter;
 
     private boolean mItemUpdated;
-
-    private boolean mIsFetchingData;
     private boolean mIsWritingData;
     private ILuxuryListPresenter mPresenter;
+    private LuxuryListModelTask mDBAsyncTask;
 
     private LuxuryListModel(ILuxuryListPresenter presenter) {
         mAllLuxuryItems = new ArrayList<LuxuryItem>();
         mItemUpdated = false;
-        mIsFetchingData = false;
         mIsWritingData = false;
         mPresenter = presenter;
+        mDBAsyncTask = null;
     }
 
     public void setLuxuryRangeReader(IRangeReadable<LuxuryItem> luxuryRangeReader) {
@@ -108,60 +119,28 @@ public class LuxuryListModel implements ILuxuryListModel {
 
     @Override
     public boolean loadLuxuryItems(long start, long end) {
-        if (mIsFetchingData) {
+        if (mDBAsyncTask != null) {
             return false;
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (this) {
-                    mIsFetchingData = true;
-                    ArrayList<LuxuryItem> tmp = LuxuryItemIO.readRangeLuxuryData(start, end, mLuxuryRangeReader, false);
-
-                    if (tmp != null && !tmp.isEmpty()) {
-                        mAllLuxuryItems.addAll(tmp);
-                        setItemUpdated(true);
-                    }
-                    mIsFetchingData = false;
-                }
-            }
-        }).start();
+        mDBAsyncTask = new LuxuryListModelTask();
+        TaskParameters<TaskType> parameters = new TaskParameters<TaskType>(TaskType.LOAD_RANGE_LUXURY_ITEMS);
+        parameters.addParameter(TASK_PARAM_NAME_START, Long.toString(start));
+        parameters.addParameter(TASK_PARAM_NAME_START, Long.toString(end));
+        mDBAsyncTask.execute(parameters);
 
         return true;
     }
 
     @Override
     public boolean loadAllLuxuryItems() {
-        if (mIsFetchingData) {
+        if (mDBAsyncTask != null) {
             return false;
         }
-/*
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (this) {
-                    mIsFetchingData = true;
-                    ArrayList<LuxuryItem> tmp = LuxuryItemIO.readAllLuxuryData(mLuxuryRangeReader);
-                    Log.i("pandia", "loadAll result size: " + tmp.size());
-                    if (tmp != null && !tmp.isEmpty()) {
-                        mAllLuxuryItems.clear();
-                        mAllLuxuryItems = tmp;
-                        setItemUpdated(true);
-                    }
-                    mIsFetchingData = false;
-                }
-            }
-        }).start();
-*/
 
-        ArrayList<LuxuryItem> tmp = LuxuryItemIO.readAllLuxuryData(mLuxuryRangeReader);
-        Log.i("pandia", "loadAll result size: " + tmp.size());
-        if (tmp != null && !tmp.isEmpty()) {
-            mAllLuxuryItems.clear();
-            mAllLuxuryItems = tmp;
-            setItemUpdated(true);
-        }
+        mDBAsyncTask = new LuxuryListModelTask();
+        TaskParameters<TaskType> parameters = new TaskParameters<TaskType>(TaskType.LOAD_ALL_LUXURY_ITEMS);
+        mDBAsyncTask.execute(parameters);
 
         return true;
     }
@@ -178,15 +157,85 @@ public class LuxuryListModel implements ILuxuryListModel {
 
     @Override
     public boolean removeLuxuryItem(String uniqueID) {
-        boolean ret = LuxuryItemIO.deleteLuxuryItemData(uniqueID, mLuxuryWriter);
-        ret = ret && loadAllLuxuryItems();
-        return ret;
+        if (mDBAsyncTask != null) {
+            return false;
+        }
+
+        mDBAsyncTask = new LuxuryListModelTask();
+        TaskParameters<TaskType> parameters = new TaskParameters<TaskType>(TaskType.UNIQUE_KEY_DELETE_LUXURY_ITEM);
+        parameters.addParameter(TASK_PARAM_NAME_UNIQUEID, uniqueID);
+        mDBAsyncTask.execute(parameters);
+
+        return true;
     }
 
     @Override
     public boolean removeLuxuryItem(long id) {
-        boolean ret = LuxuryItemIO.deleteLuxuryItemData(id, mLuxuryWriter);
-        ret = ret && loadAllLuxuryItems();
-        return ret;
+        if (mDBAsyncTask != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private class LuxuryListModelTask extends AsyncTask<TaskParameters<TaskType>, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(TaskParameters<TaskType>... taskTypes) {
+            if (taskTypes.length != 1) {
+                return false;
+            }
+
+            boolean ret = false;
+
+            switch (taskTypes[0].getTaskType()) {
+                case LOAD_RANGE_LUXURY_ITEMS: {
+                    int start = Integer.parseInt(taskTypes[0].getParamter(TASK_PARAM_NAME_START));
+                    int end = Integer.parseInt(taskTypes[0].getParamter(TASK_PARAM_NAME_END));
+
+                    ArrayList<LuxuryItem> tmp = LuxuryItemIO.readRangeLuxuryData(start, end, mLuxuryRangeReader, false);
+                    if (tmp != null && !tmp.isEmpty()) {
+                        mAllLuxuryItems.addAll(tmp);
+                        ret = true;
+                    }
+                }
+                    break;
+                case LOAD_ALL_LUXURY_ITEMS: {
+                    ArrayList<LuxuryItem> tmp = LuxuryItemIO.readAllLuxuryData(mLuxuryRangeReader);
+                    if (tmp != null && !tmp.isEmpty()) {
+                        mAllLuxuryItems.clear();
+                        mAllLuxuryItems = tmp;
+                        ret = true;
+                    }
+                }
+                    break;
+                case UNIQUE_KEY_DELETE_LUXURY_ITEM:
+                    String uniqueID = taskTypes[0].getParamter(TASK_PARAM_NAME_UNIQUEID);
+                    if (!uniqueID.isEmpty()) {
+                        ret = LuxuryItemIO.deleteLuxuryItemData(uniqueID, mLuxuryWriter);
+                        ArrayList<LuxuryItem> tmp = LuxuryItemIO.readAllLuxuryData(mLuxuryRangeReader);
+                        if (ret && tmp != null && !tmp.isEmpty()) {
+                            mAllLuxuryItems.clear();
+                            mAllLuxuryItems = tmp;
+                            ret = true;
+                        }
+                        else {
+                            ret = false;
+                        }
+                    }
+                    break;
+            }
+
+            return ret;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            mDBAsyncTask = null;
+            if (aBoolean) {
+                setItemUpdated(true);
+            }
+        }
     }
 }
