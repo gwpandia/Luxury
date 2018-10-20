@@ -23,6 +23,26 @@ public class LuxuryItemIO {
         writer.finishWriter();
     }
 
+    public static void writeLuxuryData(LuxuryItem data, IWritable<LuxuryItem> writer) {
+        if (writer == null) {
+            return;
+        }
+
+        writer.initializeWriter();
+        writer.writeEntry(data);
+        writer.finishWriter();
+    }
+
+    public static void updateLuxuryData(long id, LuxuryItem data, IWritable<LuxuryItem> writer) {
+        if (writer == null) {
+            return;
+        }
+
+        writer.initializeWriter();
+        writer.writeEntry(data);
+        writer.finishWriter();
+    }
+
     // dynamically loading ?
     public static ArrayList<LuxuryItem> readAllLuxuryData(IRangeReadable<LuxuryItem> reader) {
         if (reader == null) {

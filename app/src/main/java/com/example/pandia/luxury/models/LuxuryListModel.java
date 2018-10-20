@@ -224,6 +224,9 @@ public class LuxuryListModel implements ILuxuryListModel {
                         }
                     }
                     break;
+                default:
+                    assert(false);
+                    break;
             }
 
             return ret;

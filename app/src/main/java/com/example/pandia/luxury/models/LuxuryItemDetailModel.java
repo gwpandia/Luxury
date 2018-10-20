@@ -231,7 +231,10 @@ public class LuxuryItemDetailModel implements ILuxuryItemDetailModel {
                         mLuxuryItem = tmp;
                         ret = true;
                     }
-                break;
+                    break;
+                default:
+                    assert(false);
+                    break;
             }
 
             return ret;

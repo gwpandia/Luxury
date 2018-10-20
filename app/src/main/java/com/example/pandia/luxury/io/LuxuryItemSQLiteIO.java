@@ -94,6 +94,7 @@ public class LuxuryItemSQLiteIO implements IWritable<LuxuryItem>, IReadable<Luxu
         }
 
         if (entry.isUniqueIDUpdated()) {
+            mItemDAO.deleteLuxuryItem(entry.getOldUniqueID());
             mItemImageDAO.deleteLuxuryItemImage(entry.getOldUniqueID());
         }
     }
