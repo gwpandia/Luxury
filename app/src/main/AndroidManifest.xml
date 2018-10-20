@@ -29,7 +29,14 @@
         </activity>
         <activity android:name=".activities.QRCodeScannerActivity" />
         <activity android:name=".activities.QRCodeEncodeActivity" />
-        <activity android:name=".activities.LuxuryListViewActivity"></activity>
+        <activity android:name=".activities.LuxuryListViewActivity" />
+        <activity
+            android:name=".activities.LuxuryItemDetailViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditLuxuryItemActitvity"
+            android:label="@string/title_activity_edit_luxury_item_actitvity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

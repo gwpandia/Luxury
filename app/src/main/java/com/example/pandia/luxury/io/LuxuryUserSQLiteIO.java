@@ -27,6 +27,11 @@ public class LuxuryUserSQLiteIO implements IWritable<LuxuryUser>, IReadable<Luxu
     }
 
     @Override
+    public LuxuryUser readEntry(String key) {
+        return null;
+    }
+
+    @Override
     public void finishReader() {
 
     }

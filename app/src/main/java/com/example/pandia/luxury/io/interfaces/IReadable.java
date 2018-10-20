@@ -5,5 +5,6 @@ public interface IReadable<T> {
     public long entrySize();
     public boolean isInBound(long i);
     public T readEntry(long i);
+    public T readEntry(String key);
     public void finishReader();
 }

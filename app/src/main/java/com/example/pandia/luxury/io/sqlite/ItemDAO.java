@@ -12,7 +12,9 @@ import com.example.pandia.luxury.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
+import static com.example.pandia.luxury.constants.LuxuryItemConstants.*;
 
 public class ItemDAO {
     public static final String LUXURYITEM_TABLE_NAME = "luxury_item";
@@ -360,6 +362,12 @@ public class ItemDAO {
         item1.setPurchasedDate(Util.convertStringToDate("2018-03-01,00:00:00"));
         item1.setItemType(LuxuryItemConstants.LuxuryType.values()[1]);
         item1.setCreateDate("2018-03-01,00:00:00");
+        TreeMap<String, String> extraData1 = new TreeMap<String, String>();
+        extraData1.put(MODEL_SUBCATEGORY_KEY, SUBCATEGORY_MODEL_GUNDAM);
+        extraData1.put(BOOK_SUBCATEGORY_KEY, "Should not appear");
+        extraData1.put("Status", "Unopened");
+        extraData1.put("Foo", "Bar");
+        item1.setAllExtraData(extraData1);
 
         LuxuryItem item2 = new LuxuryItem("UNINIT_ITEM");
         item2.setItemName("Item 2");
@@ -367,6 +375,9 @@ public class ItemDAO {
         item2.setPurchasedDate(Util.convertStringToDate("2018-04-01,00:00:00"));
         item2.setItemType(LuxuryItemConstants.LuxuryType.values()[2]);
         item2.setCreateDate("2018-04-01,00:00:00");
+        TreeMap<String, String> extraData2 = new TreeMap<String, String>();
+        extraData2.put(LEGO_SUBCATEGORY_KEY, SUBCATEGORY_LEGO_SYSTEM);
+        item2.setAllExtraData(extraData2);
 
         LuxuryItem item3 = new LuxuryItem("UNINIT_ITEM");
         item3.setItemName("Item 3");
@@ -374,6 +385,9 @@ public class ItemDAO {
         item3.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item3.setItemType(LuxuryItemConstants.LuxuryType.values()[3]);
         item3.setCreateDate("2018-05-01,00:00:00");
+        TreeMap<String, String> extraData3 = new TreeMap<String, String>();
+        extraData3.put(BOOK_SUBCATEGORY_KEY, SUBCATEGORY_LEGO_SYSTEM);
+        item3.setAllExtraData(extraData3);
 
         LuxuryItem item4 = new LuxuryItem("UNINIT_ITEM");
         item4.setItemName("Item 4");

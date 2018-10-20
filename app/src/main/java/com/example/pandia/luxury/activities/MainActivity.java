@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mAddButton;
     private ImageButton mViewButton;
     private ImageButton mBorrowButton;
+    private ImageButton mRestoreButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         mBorrowButton = findViewById(R.id.MainActivity_BorrowButton);
         mBorrowButton.setOnClickListener((View v) -> {
             Intent intent = new Intent(MainActivity.this, QRCodeEncodeActivity.class);
+            MainActivity.this.startActivity(intent);
+        });
+
+        mRestoreButton = findViewById(R.id.MainActivity_RestoreButton);
+        mRestoreButton.setOnClickListener((View v) -> {
+            Intent intent = new Intent(MainActivity.this, LuxuryItemDetailViewActivity.class);
             MainActivity.this.startActivity(intent);
         });
     }

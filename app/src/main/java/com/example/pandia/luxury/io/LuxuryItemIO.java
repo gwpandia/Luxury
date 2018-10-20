@@ -63,6 +63,18 @@ public class LuxuryItemIO {
         return data;
     }
 
+    public static LuxuryItem readOneLuxuryData(String uniqueID, IReadable<LuxuryItem> reader) {
+        if (reader == null) {
+            return null;
+        }
+
+        LuxuryItem data = null;
+        reader.initializeReader();
+        data = reader.readEntry(uniqueID);
+        reader.finishReader();
+        return data;
+    }
+
     public static boolean deleteLuxuryItemData(String uniqueID, IWritable<LuxuryItem> writer) {
         if (writer == null) {
             return false;

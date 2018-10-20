@@ -55,7 +55,15 @@ public class LuxuryItemSQLiteIO implements IWritable<LuxuryItem>, IReadable<Luxu
             Bitmap bitmap = mItemImageDAO.getLuxuryItemImageByUniqueID(item.getUniqueID());
             item.setItemImage(bitmap);
         //}
-        return null;
+        return item;
+    }
+
+    @Override
+    public LuxuryItem readEntry(String key) {
+        LuxuryItem item = mItemDAO.getLuxuryItemByUniqueID(key);
+        Bitmap bitmap = mItemImageDAO.getLuxuryItemImageByUniqueID(item.getUniqueID());
+        item.setItemImage(bitmap);
+        return item;
     }
 
     @Override

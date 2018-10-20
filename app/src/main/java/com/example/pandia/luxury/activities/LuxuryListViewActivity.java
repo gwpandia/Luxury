@@ -1,6 +1,7 @@
 package com.example.pandia.luxury.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,12 +34,15 @@ import com.example.pandia.luxury.data.LuxuryItem;
 import com.example.pandia.luxury.interfaces.ILuxuryListModel;
 import com.example.pandia.luxury.interfaces.ILuxuryListPresenter;
 import com.example.pandia.luxury.interfaces.ILuxuryListView;
+import com.example.pandia.luxury.models.LuxuryItemDetailModel;
 import com.example.pandia.luxury.models.LuxuryListModel;
 import com.example.pandia.luxury.presenters.LuxuryListPresenter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.example.pandia.luxury.constants.LuxuryItemConstants.BUNDLE_UNIQUEID_KEY;
 
 public class LuxuryListViewActivity extends AppCompatActivity implements ILuxuryListView {
 
@@ -136,6 +140,14 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
         mListItemAdapter.notifyDataSetChanged();
     }
 
+    private void loadDetailLuxuryItem(String uniqueID) {
+        Intent intent = new Intent(LuxuryListViewActivity.this, LuxuryItemDetailViewActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_UNIQUEID_KEY, uniqueID);
+        intent.putExtras(bundle);
+        LuxuryListViewActivity.this.startActivity(intent);
+    }
+
     public class LuxuryItemAdapter extends BaseSwipeAdapter implements Filterable {
         private LayoutInflater mInflater;
         private ArrayList<LuxuryItem> mOriginalItems;
@@ -201,7 +213,8 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
                 @Override
                 public void onClick(View v) {
                     mListItemAdapter.closeAllExcept(swipeLayout);
-                    Toast.makeText(mContext, "Click", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "Click", Toast.LENGTH_SHORT).show();
+                    loadDetailLuxuryItem(mItems.get(position).getUniqueID());
                 }
             });
             convertView.findViewById(R.id.Luxury_Item_Delete_Button).setOnClickListener(new View.OnClickListener() {

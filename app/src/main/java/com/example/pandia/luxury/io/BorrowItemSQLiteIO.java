@@ -42,6 +42,11 @@ public class BorrowItemSQLiteIO implements IWritable<BorrowItem>, IReadable<Borr
     }
 
     @Override
+    public BorrowItem readEntry(String key) {
+        return mItemDAO.getBorrowItemByUniqueID(key);
+    }
+
+    @Override
     public void finishReader() {
         mItemDAO.closeDB();
     }
