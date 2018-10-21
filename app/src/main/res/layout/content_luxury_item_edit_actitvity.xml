@@ -36,12 +36,6 @@
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="10sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,12 +71,6 @@
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="10sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,6 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:inputType="number|numberDecimal"
                 android:textSize="24sp" />
         </LinearLayout>
 
@@ -117,12 +106,6 @@
                 android:layout_weight="1"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textSize="10sp" />
         </LinearLayout>
 
@@ -139,8 +122,47 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/EditContent_TypeText"
+            <Spinner
+                android:id="@+id/EditContent_TypeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/EditContent_SubTypeHeader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/EditContent_SubTypeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="  SubType"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Spinner
+                android:id="@+id/EditContent_SubTypeSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -158,12 +180,6 @@
                 android:layout_weight="1"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textSize="10sp" />
         </LinearLayout>
 
@@ -185,6 +201,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:inputType="date|time"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -199,12 +216,6 @@
                 android:layout_weight="1"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="10sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textSize="10sp" />
         </LinearLayout>
 

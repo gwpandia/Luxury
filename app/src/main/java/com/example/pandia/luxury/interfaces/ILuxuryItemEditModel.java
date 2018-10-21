@@ -19,4 +19,15 @@ public interface ILuxuryItemEditModel {
     public void addExtraData(String key, String value);
     public void removeExtraData(String key);
     public void saveLuxuryItem();
+
+    public Bitmap getItemImage();
+    public String getItemName();
+    public int getPrice();
+    public String getUniqueID();
+    public String getPurchasedDate();
+    public String getItemType();
+    public boolean isItemHasSubType();
+    public String getItemSubType();
+    public TreeSet<String> getExtraDataKey();
+    public String getExtraDataValue(String key);
 }

@@ -3,6 +3,9 @@ package com.example.pandia.luxury.util;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import static com.example.pandia.luxury.constants.LuxuryItemConstants.SUBCATEGORY_VALUE_IDENTIFIER;
 
 public class Util {
     private static final String DATE_FORMAT = "yyyy-MM-dd,HH:mm:ss";
@@ -179,6 +184,24 @@ public class Util {
         return list;
     }
 
+    public static String generateSubTypeItemDisplayName(String origin) {
+        String ret = "";
+        if (origin.startsWith(SUBCATEGORY_VALUE_IDENTIFIER)) {
+            ret = origin.substring(SUBCATEGORY_VALUE_IDENTIFIER.length());
+        }
+        ret = ret.replace("_", " ");
+        return ret;
+    }
+
+    public static String generateSubTypeModelString(String itemName) {
+        String ret = "";
+        ret = itemName.replace(" ", "_");
+        if (!ret.startsWith(SUBCATEGORY_VALUE_IDENTIFIER)) {
+            ret = SUBCATEGORY_VALUE_IDENTIFIER + ret;
+        }
+        return ret;
+    }
+
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -194,10 +217,21 @@ public class Util {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static Bitmap downScaleBitmap(Bitmap bitmap, int reqWidth, int reqHeight) {
+        int inSample = calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), reqWidth, reqHeight);
+        Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth() / inSample,
+                bitmap.getHeight() / inSample, bitmap.getConfig());
+        Canvas canvas = new Canvas(convertedBitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return convertedBitmap;
+    }
+
+    public static int calculateInSampleSize(int originWidth, int originHeight, int reqWidth, int reqHeight) {
         // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
+        final int height = originWidth;
+        final int width = originHeight;
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
@@ -214,5 +248,9 @@ public class Util {
         }
 
         return inSampleSize;
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        return calculateInSampleSize(options.outWidth, options.outHeight, reqWidth, reqHeight);
     }
 }

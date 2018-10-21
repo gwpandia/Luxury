@@ -173,12 +173,7 @@ public class LuxuryItemDetailModel implements ILuxuryItemDetailModel {
             return null;
         }
 
-        String retVal = "";
-        if (subCatValue.startsWith(SUBCATEGORY_VALUE_IDENTIFIER)) {
-            retVal = subCatValue.substring(SUBCATEGORY_VALUE_IDENTIFIER.length());
-        }
-        retVal = retVal.replaceAll("_", " ");
-        return retVal;
+        return Util.generateSubTypeItemDisplayName(subCatValue);
     }
 
     @Override

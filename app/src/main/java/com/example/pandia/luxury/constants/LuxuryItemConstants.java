@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class LuxuryItemConstants {
 
@@ -135,7 +136,7 @@ public class LuxuryItemConstants {
     public static final Map<LuxuryType, String> LUXURY_TYPE_DISPLAY_NAME;
 
     static {
-        Map <LuxuryType, String> map = new HashMap<LuxuryType, String>();
+        Map <LuxuryType, String> map = new TreeMap<LuxuryType, String>();
         map.put(LuxuryType.OTHER_TYPE, "OTHER");
         map.put(LuxuryType.MODEL, "MODEL");
         map.put(LuxuryType.LEGO, "LEGO");

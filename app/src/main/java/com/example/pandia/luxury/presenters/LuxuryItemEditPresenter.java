@@ -8,6 +8,8 @@ import com.example.pandia.luxury.interfaces.ILuxuryItemEditPresenter;
 import com.example.pandia.luxury.interfaces.ILuxuryItemEditView;
 
 import java.util.Date;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class LuxuryItemEditPresenter implements ILuxuryItemEditPresenter {
 
@@ -77,5 +79,82 @@ public class LuxuryItemEditPresenter implements ILuxuryItemEditPresenter {
     @Override
     public void saveLuxuryItem() {
         mModel.saveLuxuryItem();
+    }
+
+    @Override
+    public Bitmap getItemImage() {
+        if (mModel == null) {
+            return null;
+        }
+        return mModel.getItemImage();
+    }
+
+    @Override
+    public String getItemName() {
+        if (mModel == null) {
+            return null;
+        }
+        return mModel.getItemName();
+    }
+
+    @Override
+    public int getPrice() {
+        if (mModel == null) {
+            return 0;
+        }
+        return mModel.getPrice();
+    }
+
+    @Override
+    public String getUniqueID() {
+        if (mModel == null) {
+            return null;
+        }
+        return mModel.getUniqueID();
+    }
+
+    @Override
+    public String getPurchasedDate() {
+        if (mModel == null) {
+            return null;
+        }
+        return mModel.getPurchasedDate();
+    }
+
+    @Override
+    public String getItemType() {
+        if (mModel == null) {
+            return null;
+        }
+        return mModel.getItemType();
+    }
+
+    @Override
+    public boolean isItemHasSubType() {
+        if (mModel == null) {
+            return false;
+        }
+        return mModel.isItemHasSubType();
+    }
+
+    @Override
+    public String getItemSubType() {
+        if (mModel == null) {
+            return null;
+        }
+        return mModel.getItemSubType();
+    }
+
+    @Override
+    public TreeMap<String, String> getExtraData() {
+        TreeSet<String> keys = mModel.getExtraDataKey();
+        TreeMap<String, String> retMap = new TreeMap<String, String>();
+        for (String key: keys) {
+            String value = mModel.getExtraDataValue(key);
+            if (value != null) {
+                retMap.put(key, value);
+            }
+        }
+        return retMap;
     }
 }

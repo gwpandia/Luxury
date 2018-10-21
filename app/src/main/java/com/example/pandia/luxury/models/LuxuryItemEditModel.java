@@ -13,11 +13,18 @@ import com.example.pandia.luxury.io.LuxuryItemIO;
 import com.example.pandia.luxury.io.LuxuryItemSQLiteIO;
 import com.example.pandia.luxury.io.interfaces.IReadable;
 import com.example.pandia.luxury.io.interfaces.IWritable;
+import com.example.pandia.luxury.util.Util;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.TreeSet;
 
+import static com.example.pandia.luxury.constants.LuxuryItemConstants.ITEM_DEFAULT_EXTRA_VALUE;
 import static com.example.pandia.luxury.constants.LuxuryItemConstants.LUXURY_SUBTYPE_DISPLAY_NAME;
 import static com.example.pandia.luxury.constants.LuxuryItemConstants.LUXURY_SUBTYPE_STRING_KEY;
+import static com.example.pandia.luxury.constants.LuxuryItemConstants.LUXURY_TYPE_DISPLAY_NAME;
+import static com.example.pandia.luxury.constants.LuxuryItemConstants.SUBCATEGORY_KEY_IDENTIFIER;
+import static com.example.pandia.luxury.constants.LuxuryItemConstants.SUBCATEGORY_VALUE_IDENTIFIER;
 
 public class LuxuryItemEditModel implements ILuxuryItemEditModel {
     private enum TaskType {
@@ -174,6 +181,110 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
         mDBAsyncTask = new LuxuryItemEditModel.LuxuryItemEditModelTask();
         TaskParameters<LuxuryItemEditModel.TaskType> parameters = new TaskParameters<LuxuryItemEditModel.TaskType>(LuxuryItemEditModel.TaskType.LOAD_LUXURY_ITEM);
         mDBAsyncTask.execute(parameters);
+    }
+
+    @Override
+    public Bitmap getItemImage() {
+        if (!isDataAvailable()) {
+            return null;
+        }
+        return mLuxuryItem.getItemImage();
+    }
+
+    @Override
+    public String getItemName() {
+        if (!isDataAvailable()) {
+            return null;
+        }
+        return mLuxuryItem.getItemName();
+    }
+
+    @Override
+    public int getPrice() {
+        if (!isDataAvailable()) {
+            return 0;
+        }
+        return mLuxuryItem.getPrice();
+    }
+
+    @Override
+    public String getUniqueID() {
+        if (!isDataAvailable()) {
+            return null;
+        }
+        return mLuxuryItem.getUniqueID();
+    }
+
+    @Override
+    public String getPurchasedDate() {
+        if (!isDataAvailable()) {
+            return null;
+        }
+        return Util.convertDateToString(mLuxuryItem.getPurchasedDate());
+    }
+
+    @Override
+    public String getItemType() {
+        if (!isDataAvailable()) {
+            return null;
+        }
+        return LUXURY_TYPE_DISPLAY_NAME.get(mLuxuryItem.getItemType());
+    }
+
+    @Override
+    public boolean isItemHasSubType() {
+        if (!isDataAvailable()) {
+            return false;
+        }
+        return LUXURY_SUBTYPE_STRING_KEY.containsKey(mLuxuryItem.getItemType());
+    }
+
+    @Override
+    public String getItemSubType() {
+        if (!isDataAvailable()) {
+            return null;
+        }
+        String subCatKey = LUXURY_SUBTYPE_STRING_KEY.getOrDefault(mLuxuryItem.getItemType(), "");
+        String subCatValue = mLuxuryItem.getExtraData(subCatKey);
+
+        if (ITEM_DEFAULT_EXTRA_VALUE.equals(subCatValue) ||
+                !LUXURY_SUBTYPE_DISPLAY_NAME.getOrDefault(subCatKey, new HashSet<String>()).contains(subCatValue)) {
+            return null;
+        }
+
+        return Util.generateSubTypeItemDisplayName(subCatValue);
+    }
+
+    @Override
+    public TreeSet<String> getExtraDataKey() {
+        if (!isDataAvailable()) {
+            return null;
+        }
+
+        TreeSet<String> retValue = new TreeSet<String>();
+
+        for (String key: mLuxuryItem.getAllExtraData().keySet()) {
+            if (!key.startsWith(SUBCATEGORY_KEY_IDENTIFIER)) {
+                retValue.add(key);
+            }
+        }
+
+        return retValue;
+    }
+
+    @Override
+    public String getExtraDataValue(String key) {
+        if (!isDataAvailable()) {
+            return null;
+        }
+
+        String value = mLuxuryItem.getExtraData(key);
+
+        if (ITEM_DEFAULT_EXTRA_VALUE.equals(value)
+                || value.startsWith(SUBCATEGORY_VALUE_IDENTIFIER)) {
+            return null;
+        }
+        return value;
     }
 
     private void loadLuxuryItem() {
