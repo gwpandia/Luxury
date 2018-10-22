@@ -90,6 +90,7 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
         mItemUpdated = itemUpdated;
         mInited = true;
         if (mPresenter != null && mItemUpdated) {
+            mUniqueID = mPresenter.getUniqueID();
             mPresenter.updateEditView();
             mItemUpdated = false;
         }
@@ -179,7 +180,7 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
         //TODO: Change name old unique id update ?
         mLuxuryItem.updateUniqueID();
         mDBAsyncTask = new LuxuryItemEditModel.LuxuryItemEditModelTask();
-        TaskParameters<LuxuryItemEditModel.TaskType> parameters = new TaskParameters<LuxuryItemEditModel.TaskType>(LuxuryItemEditModel.TaskType.LOAD_LUXURY_ITEM);
+        TaskParameters<LuxuryItemEditModel.TaskType> parameters = new TaskParameters<LuxuryItemEditModel.TaskType>(TaskType.SAVE_LUXURY_ITEM);
         mDBAsyncTask.execute(parameters);
     }
 

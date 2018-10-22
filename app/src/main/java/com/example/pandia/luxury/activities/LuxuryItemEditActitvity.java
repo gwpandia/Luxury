@@ -124,19 +124,31 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
                 builder.setTitle("Title");
 
                 LinearLayout layout = new LinearLayout(LuxuryItemEditActitvity.this);
+                layout.setOrientation(LinearLayout.VERTICAL);
 
-                final TextInputLayout keyInput = new TextInputLayout(LuxuryItemEditActitvity.this);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+
+                final EditText keyInput = new EditText(LuxuryItemEditActitvity.this);
                 keyInput.setHint("Key");
-                final TextInputLayout valueInput = new TextInputLayout(LuxuryItemEditActitvity.this);
-                keyInput.setHint("Value");
+                keyInput.setLayoutParams(layoutParams);
+
+                final EditText valueInput = new EditText(LuxuryItemEditActitvity.this);
+                valueInput.setHint("Value");
+                valueInput.setLayoutParams(layoutParams);
+
                 layout.addView(keyInput);
                 layout.addView(valueInput);
                 builder.setView(layout);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String key = keyInput.getEditText().toString();
-                        String value = valueInput.getEditText().toString();
+                        String key = keyInput.getText().toString();
+                        String value = valueInput.getText().toString();
+
+                        if (key == null || key.isEmpty() || value == null || value.isEmpty()) {
+                            return;
+                        }
 
                         if (key.startsWith(SUBCATEGORY_KEY_IDENTIFIER)) {
                             Toast.makeText(LuxuryItemEditActitvity.this, "Invalid key.", Toast.LENGTH_SHORT).show();
@@ -148,7 +160,9 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
                             return;
                         }
 
-                        generateMetaDataItem(key, value);
+                        LinearLayout layout = generateMetaDataItem(key, value);
+                        int index = mRootLayout.indexOfChild(mAddMetaButton);
+                        mRootLayout.addView(layout, index);
                         dialog.dismiss();
                     }
                 });
@@ -203,7 +217,7 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
     }
 
     private void initTypeSpinner() {
-        String [] typeArray = (String [])LUXURY_TYPE_DISPLAY_NAME.values().toArray();
+        String [] typeArray = LUXURY_TYPE_DISPLAY_NAME.values().toArray(new String[LUXURY_TYPE_DISPLAY_NAME.values().size()]);
         mTypeSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeArray);
         mTypeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mTypeSpinner.setAdapter(mTypeSpinnerAdapter);
@@ -313,6 +327,7 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
         //TODO: Enable here.
         //mItemImage.setImageBitmap(Util.downScaleBitmap(mLuxuryItemEditModel.getItemImage(), 0, 600));
         mTypeSpinner.setSelection(mTypeSpinnerAdapter.getPosition(mLuxuryItemEditPresenter.getItemType()));
+        mPurchasedEditText.setText(mLuxuryItemEditPresenter.getPurchasedDate());
 
         if (mLuxuryItemEditPresenter.isItemHasSubType()) {
             //TODO: Do we need to regenerate sub item menu here? Set selection trigger callback?
@@ -322,10 +337,11 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
         TreeMap<String, String> extraData = mLuxuryItemEditPresenter.getExtraData();
 
         if (!extraData.isEmpty()) {
+            mMetaHeader.setVisibility(View.VISIBLE);
             for (String key: extraData.keySet()) {
                 LinearLayout layout = generateMetaDataItem(key, extraData.get(key));
-                // Put above button and image
-                mRootLayout.addView(layout, mRootLayout.getChildCount() - 1);
+                int index = mRootLayout.indexOfChild(mAddMetaButton);
+                mRootLayout.addView(layout, index);
             }
         }
         else {
@@ -364,8 +380,8 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
 
         Button deleteButton = new Button(this);
         deleteButton.setLayoutParams(buttonLayoutParams);
-        valueView.setText("Delete");
-        valueView.setTextSize(COMPLEX_UNIT_SP, 24);
+        deleteButton.setText("Delete");
+        deleteButton.setTextSize(COMPLEX_UNIT_SP, 24);
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -417,6 +433,8 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
     private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
+        //TODO: This will not grab full size picture
+        // https://stackoverflow.com/questions/3442462/how-to-capture-an-image-and-store-it-with-the-native-android-camera
     }
 
     private void requestPermission() {
@@ -486,6 +504,7 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
 
         } else if (requestCode == CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            mOriginSizeItemImage = thumbnail;
             mItemImage.setImageBitmap(Util.downScaleBitmap(mOriginSizeItemImage, 0, 600));
             Toast.makeText(LuxuryItemEditActitvity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }

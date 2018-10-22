@@ -1,5 +1,6 @@
 package com.example.pandia.luxury.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -55,8 +56,11 @@ public class LuxuryItemDetailViewActivity extends AppCompatActivity implements I
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(LuxuryItemDetailViewActivity.this, LuxuryItemEditActitvity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(BUNDLE_UNIQUEID_KEY, mItemPresenter.getUniqueID());
+                intent.putExtras(bundle);
+                LuxuryItemDetailViewActivity.this.startActivity(intent);
             }
         });
 

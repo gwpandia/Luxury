@@ -139,6 +139,9 @@ public class LuxuryItem extends BaseItem {
 
     @Override
     public void updateUniqueID() {
+        if (mItemName == null || mItemType == null || mCreateDate == null) {
+            return;
+        }
         mUniqueID = ItemUtil.generateItemUniqueID(mItemName, mItemType,
                 Util.convertLocalDateTimeToString(mCreateDate));
     }
