@@ -111,9 +111,11 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
                 Log.e("ListView", "onNothingSelected:");
             }
         });
+    }
 
-
-        //Todo: Remove test code
+    @Override
+    protected void onResume() {
+        super.onResume();
         mListPresenter.onListScrolledUp();
     }
 
@@ -194,30 +196,45 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
         public View generateView(int position, ViewGroup parent) {
             // TODO Auto-generated method stub
             View convertView = mInflater.inflate(R.layout.luxury_item, null);
+            ViewHolder holder = new ViewHolder();
+            holder.mItemName = convertView.findViewById(R.id.Luxury_Item_Name);
+            holder.mItemType = convertView.findViewById(R.id.Luxury_Item_SubName);
+            holder.mItemImage = convertView.findViewById(R.id.Luxury_Item_Image);
+            holder.mDeleteButton = convertView.findViewById(R.id.Luxury_Item_Delete_Button);
+            holder.mSwipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
+            convertView.setTag(holder);
+            return convertView;
+        }
 
-            SwipeLayout swipeLayout = (SwipeLayout)convertView.findViewById(getSwipeLayoutResourceId(position));
-            swipeLayout.addSwipeListener(new SimpleSwipeListener() {
+        @Override
+        public void fillValues(int position, View convertView) {
+            ViewHolder holder = (ViewHolder) convertView.getTag();
+            holder.mItemImage.setImageBitmap(mItems.get(position).getItemImage());
+            holder.mItemName.setText(mItems.get(position).getItemName());
+            holder.mItemType.setText(LuxuryItemConstants.LUXURY_TYPE_DISPLAY_NAME.get(mItems.get(position).getItemType()));
+            holder.mSwipeLayout.addSwipeListener(new SimpleSwipeListener() {
                 @Override
                 public void onOpen(SwipeLayout layout) {
                     //YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.Luxury_Item_Delete_Button));
                 }
             });
-            swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
+            holder.mSwipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
                 @Override
                 public void onDoubleClick(SwipeLayout layout, boolean surface) {
-                    mListItemAdapter.closeAllExcept(swipeLayout);
+                    mListItemAdapter.closeAllExcept(holder.mSwipeLayout);
                     Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
                 }
             });
-            swipeLayout.setOnClickListener(new SwipeLayout.OnClickListener(){
+            holder.mSwipeLayout.setOnClickListener(new SwipeLayout.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    mListItemAdapter.closeAllExcept(swipeLayout);
+                    mListItemAdapter.closeAllExcept(holder.mSwipeLayout);
                     //Toast.makeText(mContext, "Click", Toast.LENGTH_SHORT).show();
                     loadDetailLuxuryItem(mItems.get(position).getUniqueID());
                 }
             });
-            convertView.findViewById(R.id.Luxury_Item_Delete_Button).setOnClickListener(new View.OnClickListener() {
+            holder.mDeleteButton.setText("Delete" + position);
+            holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //TODO: Why SwipeLayout does not swipe back when item is removed
@@ -225,19 +242,6 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
                     Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
                 }
             });
-
-            return convertView;
-        }
-
-        @Override
-        public void fillValues(int position, View convertView) {
-            ImageView itemImg = (ImageView) convertView.findViewById(R.id.Luxury_Item_Image);
-            TextView itemName = (TextView) convertView.findViewById(R.id.Luxury_Item_Name);
-            TextView itemSubname = (TextView) convertView.findViewById(R.id.Luxury_Item_SubName);
-
-            itemImg.setImageBitmap(mItems.get(position).getItemImage());
-            itemName.setText(mItems.get(position).getItemName());
-            itemSubname.setText(LuxuryItemConstants.LUXURY_TYPE_DISPLAY_NAME.get(mItems.get(position).getItemType()));
         }
 
         @Override
@@ -290,5 +294,13 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
 
             return filter;
         }
+    }
+
+    public static class ViewHolder {
+        public ImageView mItemImage;
+        public TextView mItemName;
+        public TextView mItemType;
+        public Button mDeleteButton;
+        public SwipeLayout mSwipeLayout;
     }
 }

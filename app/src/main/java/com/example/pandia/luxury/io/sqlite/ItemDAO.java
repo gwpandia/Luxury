@@ -362,6 +362,7 @@ public class ItemDAO {
         item1.setPurchasedDate(Util.convertStringToDate("2018-03-01,00:00:00"));
         item1.setItemType(LuxuryItemConstants.LuxuryType.values()[1]);
         item1.setCreateDate("2018-03-01,00:00:00");
+        item1.updateUniqueID();
         TreeMap<String, String> extraData1 = new TreeMap<String, String>();
         extraData1.put(MODEL_SUBCATEGORY_KEY, SUBCATEGORY_MODEL_GUNDAM);
         extraData1.put(BOOK_SUBCATEGORY_KEY, "Should not appear");
@@ -375,6 +376,7 @@ public class ItemDAO {
         item2.setPurchasedDate(Util.convertStringToDate("2018-04-01,00:00:00"));
         item2.setItemType(LuxuryItemConstants.LuxuryType.values()[2]);
         item2.setCreateDate("2018-04-01,00:00:00");
+        item2.updateUniqueID();
         TreeMap<String, String> extraData2 = new TreeMap<String, String>();
         extraData2.put(LEGO_SUBCATEGORY_KEY, SUBCATEGORY_LEGO_SYSTEM);
         item2.setAllExtraData(extraData2);
@@ -385,6 +387,7 @@ public class ItemDAO {
         item3.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item3.setItemType(LuxuryItemConstants.LuxuryType.values()[3]);
         item3.setCreateDate("2018-05-01,00:00:00");
+        item3.updateUniqueID();
         TreeMap<String, String> extraData3 = new TreeMap<String, String>();
         extraData3.put(BOOK_SUBCATEGORY_KEY, SUBCATEGORY_LEGO_SYSTEM);
         item3.setAllExtraData(extraData3);
@@ -395,6 +398,7 @@ public class ItemDAO {
         item4.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item4.setItemType(LuxuryItemConstants.LuxuryType.values()[4]);
         item4.setCreateDate("2018-05-01,00:00:00");
+        item4.updateUniqueID();
 
         LuxuryItem item5 = new LuxuryItem("UNINIT_ITEM");
         item5.setItemName("Item 5");
@@ -402,6 +406,7 @@ public class ItemDAO {
         item5.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item5.setItemType(LuxuryItemConstants.LuxuryType.values()[5]);
         item5.setCreateDate("2018-05-01,00:00:00");
+        item5.updateUniqueID();
 
         LuxuryItem item6 = new LuxuryItem("UNINIT_ITEM");
         item6.setItemName("Item 6");
@@ -409,6 +414,7 @@ public class ItemDAO {
         item6.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item6.setItemType(LuxuryItemConstants.LuxuryType.values()[6]);
         item6.setCreateDate("2018-05-01,00:00:00");
+        item6.updateUniqueID();
 
         LuxuryItem item7 = new LuxuryItem("UNINIT_ITEM");
         item7.setItemName("Item 7");
@@ -416,6 +422,7 @@ public class ItemDAO {
         item7.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item7.setItemType(LuxuryItemConstants.LuxuryType.values()[7]);
         item7.setCreateDate("2018-05-01,00:00:00");
+        item7.updateUniqueID();
 
         LuxuryItem item8 = new LuxuryItem("UNINIT_ITEM");
         item8.setItemName("Item 8");
@@ -423,6 +430,7 @@ public class ItemDAO {
         item8.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item8.setItemType(LuxuryItemConstants.LuxuryType.values()[8]);
         item8.setCreateDate("2018-05-01,00:00:00");
+        item8.updateUniqueID();
 
         LuxuryItem item9 = new LuxuryItem("UNINIT_ITEM");
         item9.setItemName("Item 9");
@@ -430,6 +438,7 @@ public class ItemDAO {
         item9.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item9.setItemType(LuxuryItemConstants.LuxuryType.values()[9]);
         item9.setCreateDate("2018-05-01,00:00:00");
+        item9.updateUniqueID();
 
         LuxuryItem item10 = new LuxuryItem("UNINIT_ITEM");
         item10.setItemName("Item 10");
@@ -437,6 +446,7 @@ public class ItemDAO {
         item10.setPurchasedDate(Util.convertStringToDate("2018-05-01,00:00:00"));
         item10.setItemType(LuxuryItemConstants.LuxuryType.values()[10]);
         item10.setCreateDate("2018-05-01,00:00:00");
+        item10.updateUniqueID();
 
         insertLuxuryItem(item1);
         insertLuxuryItem(item2);

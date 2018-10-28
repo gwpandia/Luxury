@@ -67,6 +67,11 @@ public class LuxuryItemEditPresenter implements ILuxuryItemEditPresenter {
     }
 
     @Override
+    public void clearExtraData() {
+        mModel.clearExtraData();
+    }
+
+    @Override
     public void addExtraData(String key, String value) {
         mModel.addExtraData(key, value);
     }

@@ -83,12 +83,16 @@ public class LuxuryItem extends BaseItem {
         updateUniqueID();
     }
 
+    public void clearExtraData() {
+        mExtraData.clear();
+    }
+
     public void addExtraData(String key, String value) {
-        if (Util.isValidString(key)) {
+        if (!Util.isValidString(key)) {
             return;
         }
 
-        if (Util.isValidString(value)){
+        if (!Util.isValidString(value)){
             value = LuxuryItemConstants.ITEM_DEFAULT_EXTRA_VALUE;
         }
         mExtraData.put(key, value);

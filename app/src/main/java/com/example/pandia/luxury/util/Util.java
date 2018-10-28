@@ -218,6 +218,13 @@ public class Util {
     }
 
     public static Bitmap downScaleBitmap(Bitmap bitmap, int reqWidth, int reqHeight) {
+        if (reqWidth == 0 && reqHeight > 0) {
+            reqWidth = Math.round((float)bitmap.getWidth() * ((float)reqHeight / (float)bitmap.getHeight()));
+        }
+        else if (reqHeight == 0 && reqWidth > 0) {
+            reqHeight = Math.round((float)bitmap.getHeight() * ((float)reqWidth / (float)bitmap.getWidth()));
+        }
+
         int inSample = calculateInSampleSize(bitmap.getWidth(), bitmap.getHeight(), reqWidth, reqHeight);
         Bitmap convertedBitmap = Bitmap.createBitmap(bitmap.getWidth() / inSample,
                 bitmap.getHeight() / inSample, bitmap.getConfig());

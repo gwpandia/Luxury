@@ -162,6 +162,11 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
     }
 
     @Override
+    public void clearExtraData() {
+        mLuxuryItem.clearExtraData();
+    }
+
+    @Override
     public void addExtraData(String key, String value) {
         mLuxuryItem.addExtraData(key, value);
     }

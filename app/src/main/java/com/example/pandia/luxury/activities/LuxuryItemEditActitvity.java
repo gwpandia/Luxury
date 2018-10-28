@@ -87,6 +87,7 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
     private static final int REQUEST_READEXT = 300;
     private static final int REQUEST_WRITEEXT = 400;
 
+    //TODO: On back to detail view, when item name is updated, detail view load a null object
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,8 +207,13 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
 
         initTypeSpinner();
         initSubTypeSpinner();
-
         mLuxuryItemEditModel.initialize();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     private void setSubTypeVisibility(boolean visible) {
@@ -287,6 +293,8 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
         mLuxuryItemEditPresenter.setPrice(Integer.parseInt(mPriceEditText.getText().toString()));
         mLuxuryItemEditPresenter.setPurchasedDate(Util.convertStringToDate(mPurchasedEditText.getText().toString()));
 
+        mLuxuryItemEditPresenter.clearExtraData();
+
         for (LuxuryItemConstants.LuxuryType type : LUXURY_TYPE_DISPLAY_NAME.keySet()) {
             String selectedText = mTypeSpinnerAdapter.getItem(mTypeSpinner.getSelectedItemPosition());
             if (LUXURY_TYPE_DISPLAY_NAME.get(type).equals(selectedText)) {
@@ -323,9 +331,15 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
     public void updateEditView() {
         mNameEditText.setText(mLuxuryItemEditPresenter.getItemName());
         mPriceEditText.setText(String.valueOf(mLuxuryItemEditPresenter.getPrice()));
-        mItemImage.setImageBitmap(Util.decodeSampledBitmapFromResource(getResources(), R.drawable.b777, 0, 600));
-        //TODO: Enable here.
-        //mItemImage.setImageBitmap(Util.downScaleBitmap(mLuxuryItemEditModel.getItemImage(), 0, 600));
+        //TODO: Remove default pic
+        Bitmap bitmap = mLuxuryItemEditModel.getItemImage();
+        if (bitmap == null) {
+            bitmap = Util.decodeSampledBitmapFromResource(getResources(), R.drawable.b777, 0, 600);
+        }
+        else {
+            bitmap = Util.downScaleBitmap(bitmap, 0, 600);
+        }
+        mItemImage.setImageBitmap(bitmap);
         mTypeSpinner.setSelection(mTypeSpinnerAdapter.getPosition(mLuxuryItemEditPresenter.getItemType()));
         mPurchasedEditText.setText(mLuxuryItemEditPresenter.getPurchasedDate());
 
@@ -335,6 +349,12 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
         }
 
         TreeMap<String, String> extraData = mLuxuryItemEditPresenter.getExtraData();
+
+        // Remove old data
+        for (LinearLayout layout : mMetaDataLayouts) {
+            mRootLayout.removeView(layout);
+        }
+        mMetaDataLayouts.clear();
 
         if (!extraData.isEmpty()) {
             mMetaHeader.setVisibility(View.VISIBLE);
@@ -346,11 +366,6 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
         }
         else {
             mMetaHeader.setVisibility(View.GONE);
-
-            for (LinearLayout layout : mMetaDataLayouts) {
-                mRootLayout.removeView(layout);
-            }
-            mMetaDataLayouts.clear();
         }
     }
 
@@ -493,8 +508,9 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
                 Uri contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    mOriginSizeItemImage = bitmap;
-                    mItemImage.setImageBitmap(Util.downScaleBitmap(mOriginSizeItemImage, 0, 600));
+                    mOriginSizeItemImage = Util.downScaleBitmap(bitmap, 0, 200);
+                    //mItemImage.setImageBitmap(Util.downScaleBitmap(mOriginSizeItemImage, 0, 600));
+                    mItemImage.setImageBitmap(mOriginSizeItemImage);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -508,6 +524,7 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
             mItemImage.setImageBitmap(Util.downScaleBitmap(mOriginSizeItemImage, 0, 600));
             Toast.makeText(LuxuryItemEditActitvity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
+        saveData();
     }
 /*
     public String saveImage(Bitmap myBitmap) {

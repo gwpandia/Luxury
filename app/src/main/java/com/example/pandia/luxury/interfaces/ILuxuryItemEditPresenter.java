@@ -19,6 +19,7 @@ public interface ILuxuryItemEditPresenter {
     public void setPurchasedDate(Date date);
     public void setItemType(LuxuryItemConstants.LuxuryType type);
     public void setItemSubType(String subType);
+    public void clearExtraData();
     public void addExtraData(String key, String value);
     public void removeExtraData(String key);
     public void saveLuxuryItem();

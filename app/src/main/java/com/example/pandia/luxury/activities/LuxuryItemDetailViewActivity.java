@@ -80,12 +80,12 @@ public class LuxuryItemDetailViewActivity extends AppCompatActivity implements I
         mItemModel = LuxuryItemDetailModel.createLuxuryItemDetailModel(getApplicationContext(), Config.DEFAULT_DATA_IO, mItemPresenter, uniqueID);
         mItemPresenter.setModel(mItemModel);
         mItemPresenter.setView(this);
-        mItemModel.initialize();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mItemModel.initialize();
     }
 
     @Override
@@ -106,6 +106,9 @@ public class LuxuryItemDetailViewActivity extends AppCompatActivity implements I
         if (bitmap == null) {
             mTopImageView.setImageBitmap(
                     Util.decodeSampledBitmapFromResource(getResources(), R.drawable.b777, 0, 600));
+        }
+        else {
+            mTopImageView.setImageBitmap(bitmap);
         }
 
         TreeMap<String, String> extraData = mItemPresenter.getExtraData();
