@@ -90,9 +90,16 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
         mItemUpdated = itemUpdated;
         mInited = true;
         if (mPresenter != null && mItemUpdated) {
-            mUniqueID = mPresenter.getUniqueID();
+            mUniqueID = mLuxuryItem.getUniqueID();
             mPresenter.updateEditView();
             mItemUpdated = false;
+        }
+    }
+
+    public void notifyDataSaved() {
+        if (mPresenter != null) {
+            mUniqueID = mLuxuryItem.getUniqueID();
+            mPresenter.notifyItemSaved();
         }
     }
 
@@ -304,7 +311,8 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
     }
 
     private class LuxuryItemEditModelTask extends AsyncTask<TaskParameters<LuxuryItemEditModel.TaskType>, Void, Boolean> {
-        boolean mNotifyCaller;
+        boolean mNotifyDoneLoading;
+        boolean mNotifyDoneSaving;
         @Override
         protected Boolean doInBackground(TaskParameters<LuxuryItemEditModel.TaskType>... taskTypes) {
             if (taskTypes.length != 1) {
@@ -312,7 +320,8 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
             }
 
             boolean ret = false;
-            mNotifyCaller = false;
+            mNotifyDoneLoading = false;
+            mNotifyDoneSaving = false;
 
             switch (taskTypes[0].getTaskType()) {
                 case LOAD_LUXURY_ITEM:
@@ -321,11 +330,12 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
                     if (tmp != null) {
                         mLuxuryItem = tmp;
                         ret = true;
-                        mNotifyCaller = true;
+                        mNotifyDoneLoading = true;
                     }
                     break;
                 case SAVE_LUXURY_ITEM:
                     LuxuryItemIO.writeLuxuryData(mLuxuryItem, mLuxuryWriter);
+                    mNotifyDoneSaving = true;
                     ret = true;
                     break;
                 default:
@@ -340,8 +350,16 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             mDBAsyncTask = null;
-            if (aBoolean && mNotifyCaller) {
+
+            if (!aBoolean) {
+                return;
+            }
+
+            if (mNotifyDoneLoading) {
                 setItemUpdated(true);
+            }
+            if (mNotifyDoneSaving) {
+                notifyDataSaved();
             }
         }
     }

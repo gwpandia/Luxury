@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -56,7 +55,7 @@ public class LuxuryItemDetailViewActivity extends AppCompatActivity implements I
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LuxuryItemDetailViewActivity.this, LuxuryItemEditActitvity.class);
+                Intent intent = new Intent(LuxuryItemDetailViewActivity.this, LuxuryItemEditActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(BUNDLE_UNIQUEID_KEY, mItemPresenter.getUniqueID());
                 intent.putExtras(bundle);

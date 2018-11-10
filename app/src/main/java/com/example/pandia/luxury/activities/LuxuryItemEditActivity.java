@@ -10,13 +10,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,7 +37,6 @@ import com.example.pandia.luxury.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
@@ -53,7 +49,7 @@ import static com.example.pandia.luxury.constants.LuxuryItemConstants.LUXURY_TYP
 import static com.example.pandia.luxury.constants.LuxuryItemConstants.SUBCATEGORY_KEY_IDENTIFIER;
 import static com.example.pandia.luxury.constants.LuxuryItemConstants.SUBCATEGORY_VALUE_IDENTIFIER;
 
-public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxuryItemEditView {
+public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxuryItemEditView {
 
     private static final int GALLERY = 201;
     private static final int CAMERA = 202;
@@ -121,20 +117,20 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
         mAddMetaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LuxuryItemEditActitvity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(LuxuryItemEditActivity.this);
                 builder.setTitle("Title");
 
-                LinearLayout layout = new LinearLayout(LuxuryItemEditActitvity.this);
+                LinearLayout layout = new LinearLayout(LuxuryItemEditActivity.this);
                 layout.setOrientation(LinearLayout.VERTICAL);
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT, 1);
 
-                final EditText keyInput = new EditText(LuxuryItemEditActitvity.this);
+                final EditText keyInput = new EditText(LuxuryItemEditActivity.this);
                 keyInput.setHint("Key");
                 keyInput.setLayoutParams(layoutParams);
 
-                final EditText valueInput = new EditText(LuxuryItemEditActitvity.this);
+                final EditText valueInput = new EditText(LuxuryItemEditActivity.this);
                 valueInput.setHint("Value");
                 valueInput.setLayoutParams(layoutParams);
 
@@ -152,12 +148,12 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
                         }
 
                         if (key.startsWith(SUBCATEGORY_KEY_IDENTIFIER)) {
-                            Toast.makeText(LuxuryItemEditActitvity.this, "Invalid key.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LuxuryItemEditActivity.this, "Invalid key.", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
                         if (value.startsWith(SUBCATEGORY_VALUE_IDENTIFIER)) {
-                            Toast.makeText(LuxuryItemEditActitvity.this, "Invalid value.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LuxuryItemEditActivity.this, "Invalid value.", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -369,6 +365,13 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
         }
     }
 
+    @Override
+    public void onItemSaved() {
+        //TODO: Switch to which activity when Add Item ?
+        Intent intent = new Intent(this, LuxuryListViewActivity.class);
+        startActivity(intent);
+    }
+
     private LinearLayout generateMetaDataItem(String key, String value) {
         LinearLayout layout = new LinearLayout(this);
         LinearLayout.LayoutParams rootLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -453,43 +456,43 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
     }
 
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(LuxuryItemEditActitvity.this, Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(LuxuryItemEditActivity.this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActitvity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActivity.this,
                     Manifest.permission.CAMERA)) {
-                ActivityCompat.requestPermissions(LuxuryItemEditActitvity.this, new String[]{Manifest.permission.CAMERA},
+                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this, new String[]{Manifest.permission.CAMERA},
                         REQUEST_CAMERA);
             }
             else {
-                ActivityCompat.requestPermissions(LuxuryItemEditActitvity.this,
+                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this,
                         new String[]{Manifest.permission.CAMERA},
                         REQUEST_CAMERA);
             }
         }
 
-        if (ContextCompat.checkSelfPermission(LuxuryItemEditActitvity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(LuxuryItemEditActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActitvity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActivity.this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(LuxuryItemEditActitvity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_READEXT);
             }
             else {
-                ActivityCompat.requestPermissions(LuxuryItemEditActitvity.this,
+                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         REQUEST_READEXT);
             }
         }
 
-        if (ContextCompat.checkSelfPermission(LuxuryItemEditActitvity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(LuxuryItemEditActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActitvity.this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(LuxuryItemEditActitvity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_WRITEEXT);
             }
             else {
-                ActivityCompat.requestPermissions(LuxuryItemEditActitvity.this,
+                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_WRITEEXT);
             }
@@ -514,7 +517,7 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(LuxuryItemEditActitvity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LuxuryItemEditActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -522,9 +525,9 @@ public class LuxuryItemEditActitvity extends AppCompatActivity implements ILuxur
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             mOriginSizeItemImage = thumbnail;
             mItemImage.setImageBitmap(Util.downScaleBitmap(mOriginSizeItemImage, 0, 600));
-            Toast.makeText(LuxuryItemEditActitvity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LuxuryItemEditActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
-        saveData();
+        //saveData();
     }
 /*
     public String saveImage(Bitmap myBitmap) {

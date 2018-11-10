@@ -34,7 +34,7 @@
             android:name=".activities.LuxuryItemDetailViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.LuxuryItemEditActitvity"
+            android:name=".activities.LuxuryItemEditActivity"
             android:label="@string/title_activity_edit_luxury_item_actitvity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

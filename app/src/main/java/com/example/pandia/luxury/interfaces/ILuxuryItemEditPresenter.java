@@ -12,6 +12,7 @@ public interface ILuxuryItemEditPresenter {
     public void setView(ILuxuryItemEditView view);
 
     public void updateEditView();
+    public void notifyItemSaved();
 
     public void setItemImage(Bitmap bitmap);
     public void setItemName(String itemName);

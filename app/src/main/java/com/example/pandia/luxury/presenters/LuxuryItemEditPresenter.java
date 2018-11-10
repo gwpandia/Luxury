@@ -37,6 +37,11 @@ public class LuxuryItemEditPresenter implements ILuxuryItemEditPresenter {
     }
 
     @Override
+    public void notifyItemSaved() {
+        mView.onItemSaved();
+    }
+
+    @Override
     public void setItemImage(Bitmap bitmap) {
         mModel.setItemImage(bitmap);
     }
