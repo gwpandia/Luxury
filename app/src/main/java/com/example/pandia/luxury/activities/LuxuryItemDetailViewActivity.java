@@ -2,6 +2,7 @@ package com.example.pandia.luxury.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.pandia.luxury.R;
 import com.example.pandia.luxury.configs.Config;
+import com.example.pandia.luxury.constants.Constants;
 import com.example.pandia.luxury.interfaces.ILuxuryItemDetailModel;
 import com.example.pandia.luxury.interfaces.ILuxuryItemDetailPresenter;
 import com.example.pandia.luxury.interfaces.ILuxuryItemDetailView;
@@ -22,6 +24,7 @@ import com.example.pandia.luxury.models.LuxuryItemDetailModel;
 import com.example.pandia.luxury.presenters.LuxuryItemDetailPresenter;
 import com.example.pandia.luxury.util.Util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -100,13 +103,16 @@ public class LuxuryItemDetailViewActivity extends AppCompatActivity implements I
         mTypeText.setText(typeText);
         mCollapsingLayout.setTitle(mItemPresenter.getItemName());
 
-        Bitmap bitmap = mItemPresenter.getTopImage();
+        String imgPath = getExternalFilesDir(null) + File.separator + Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                + File.separator + mItemPresenter.getUniqueID() + "." + Config.DEFAULT_IMAGE_EXTENSION;
+        Bitmap bitmap = BitmapFactory.decodeFile(imgPath);
 
         if (bitmap == null) {
             mTopImageView.setImageBitmap(
                     Util.decodeSampledBitmapFromResource(getResources(), R.drawable.b777, 0, 600));
         }
         else {
+            bitmap = Util.downScaleBitmap(bitmap, 0, 600);
             mTopImageView.setImageBitmap(bitmap);
         }
 

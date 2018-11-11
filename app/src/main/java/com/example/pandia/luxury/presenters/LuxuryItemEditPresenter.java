@@ -87,8 +87,8 @@ public class LuxuryItemEditPresenter implements ILuxuryItemEditPresenter {
     }
 
     @Override
-    public void saveLuxuryItem() {
-        mModel.saveLuxuryItem();
+    public void saveLuxuryItem(boolean updateImage, String contentRootPath) {
+        mModel.saveLuxuryItem(updateImage, contentRootPath);
     }
 
     @Override

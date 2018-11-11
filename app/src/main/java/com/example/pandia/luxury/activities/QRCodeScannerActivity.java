@@ -14,6 +14,7 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.example.pandia.luxury.R;
+import com.example.pandia.luxury.util.Util;
 import com.google.zxing.Result;
 
 public class QRCodeScannerActivity extends AppCompatActivity {
@@ -26,19 +27,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode_scann);
 
-        if (ContextCompat.checkSelfPermission(QRCodeScannerActivity.this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(QRCodeScannerActivity.this,
-                    Manifest.permission.CAMERA)) {
-                ActivityCompat.requestPermissions(QRCodeScannerActivity.this, new String[]{Manifest.permission.CAMERA},
-                        REQUEST_CAMERA);
-            }
-            else {
-                ActivityCompat.requestPermissions(QRCodeScannerActivity.this,
-                        new String[]{Manifest.permission.CAMERA},
-                        REQUEST_CAMERA);
-            }
-        }
+        Util.requestPermission(this, Manifest.permission.CAMERA, REQUEST_CAMERA);
 
         CodeScannerView scannerView = findViewById(R.id.QRCodeActivity_scanner_view);
         mCodeScanner = new CodeScanner(this, scannerView);

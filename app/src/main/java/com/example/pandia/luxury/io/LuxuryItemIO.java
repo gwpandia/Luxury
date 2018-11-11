@@ -1,10 +1,14 @@
 package com.example.pandia.luxury.io;
 
+import com.example.pandia.luxury.configs.Config;
+import com.example.pandia.luxury.constants.Constants;
 import com.example.pandia.luxury.data.LuxuryItem;
 import com.example.pandia.luxury.io.interfaces.IRangeReadable;
 import com.example.pandia.luxury.io.interfaces.IReadable;
 import com.example.pandia.luxury.io.interfaces.IWritable;
+import com.example.pandia.luxury.util.Util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,7 +27,7 @@ public class LuxuryItemIO {
         writer.finishWriter();
     }
 
-    public static void writeLuxuryData(LuxuryItem data, IWritable<LuxuryItem> writer) {
+    public static void writeLuxuryData(LuxuryItem data, String contentRootPath, boolean updateImage, IWritable<LuxuryItem> writer) {
         if (writer == null) {
             return;
         }
@@ -31,6 +35,10 @@ public class LuxuryItemIO {
         writer.initializeWriter();
         writer.writeEntry(data);
         writer.finishWriter();
+
+        if (updateImage) {
+            updateLuxuryItemImage(data, contentRootPath);
+        }
     }
 
     public static void updateLuxuryData(long id, LuxuryItem data, IWritable<LuxuryItem> writer) {
@@ -113,5 +121,44 @@ public class LuxuryItemIO {
         writer.removeEntry(id);
         writer.finishWriter();
         return true;
+    }
+
+    private static boolean updateLuxuryItemImage(LuxuryItem data, String contentRootPath) {
+        String itemImgPath = contentRootPath + File.separator + Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                + File.separator + data.getUniqueID() + "." + Config.DEFAULT_IMAGE_EXTENSION;
+
+        String newImgPath = contentRootPath + File.separator + Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                + File.separator + Config.DEFAULT_IMAGE_NAME;
+
+        File newImgFile = new File(newImgPath);
+        File targetImgFile = new File(itemImgPath);
+
+        if (!newImgFile.exists()) {
+            return false;
+        }
+
+        boolean ret = true;
+
+        if (targetImgFile.exists()) {
+            ret = ret && targetImgFile.delete();
+        }
+
+        if (!ret) {
+            return ret;
+        }
+
+        ret = ret && newImgFile.renameTo(targetImgFile);
+
+        if (data.isUniqueIDUpdated()) {
+            String oldImgPath = contentRootPath + File.separator + Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                    + File.separator + data.getOldUniqueID() + "." + Config.DEFAULT_IMAGE_EXTENSION;
+            File oldImgFile = new File(oldImgPath);
+
+            if (oldImgFile.exists()) {
+                ret = ret && oldImgFile.delete();
+            }
+        }
+
+        return ret;
     }
 }

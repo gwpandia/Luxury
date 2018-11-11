@@ -19,7 +19,7 @@ public interface ILuxuryItemEditModel {
     public void clearExtraData();
     public void addExtraData(String key, String value);
     public void removeExtraData(String key);
-    public void saveLuxuryItem();
+    public void saveLuxuryItem(boolean updateImage, String contentRootPath);
 
     public Bitmap getItemImage();
     public String getItemName();

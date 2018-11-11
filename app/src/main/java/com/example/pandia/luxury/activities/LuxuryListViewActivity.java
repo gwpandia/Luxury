@@ -1,5 +1,6 @@
 package com.example.pandia.luxury.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import com.example.pandia.luxury.interfaces.ILuxuryListView;
 import com.example.pandia.luxury.models.LuxuryItemDetailModel;
 import com.example.pandia.luxury.models.LuxuryListModel;
 import com.example.pandia.luxury.presenters.LuxuryListPresenter;
+import com.example.pandia.luxury.util.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,9 +58,17 @@ public class LuxuryListViewActivity extends AppCompatActivity implements ILuxury
     private ILuxuryListModel mListModel;
     private ILuxuryListPresenter mListPresenter;
 
+    private static final int REQUEST_READEXT = 555;
+    private static final int REQUEST_WRITEEXT = 555;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_READEXT);
+        Util.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_WRITEEXT);
+        Util.initExternalStorageStructure(this, getPackageName() + ".provider");
+
         setContentView(R.layout.activity_luxury_list_view);
 
         mListPresenter = new LuxuryListPresenter();

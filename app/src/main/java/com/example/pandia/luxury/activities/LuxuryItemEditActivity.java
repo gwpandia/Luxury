@@ -1,17 +1,20 @@
 package com.example.pandia.luxury.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.pandia.luxury.R;
 import com.example.pandia.luxury.configs.Config;
+import com.example.pandia.luxury.constants.Constants;
 import com.example.pandia.luxury.constants.LuxuryItemConstants;
 import com.example.pandia.luxury.interfaces.ILuxuryItemEditModel;
 import com.example.pandia.luxury.interfaces.ILuxuryItemEditPresenter;
@@ -35,6 +39,8 @@ import com.example.pandia.luxury.models.LuxuryItemEditModel;
 import com.example.pandia.luxury.presenters.LuxuryItemEditPresenter;
 import com.example.pandia.luxury.util.Util;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -71,6 +77,7 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
     private ILuxuryItemEditPresenter mLuxuryItemEditPresenter;
 
     private boolean mIsNewData;
+    private boolean mIsUpdateImage = true;
 
     private ArrayAdapter<String> mTypeSpinnerAdapter;
 
@@ -209,7 +216,7 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
     @Override
     protected void onResume() {
         super.onResume();
-
+        //mIsUpdateImage = false;
     }
 
     private void setSubTypeVisibility(boolean visible) {
@@ -320,7 +327,8 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
             }
         }
 
-        mLuxuryItemEditPresenter.saveLuxuryItem();
+        String rootContentPath = getExternalFilesDir(null) + "";
+        mLuxuryItemEditPresenter.saveLuxuryItem(mIsUpdateImage, rootContentPath);
     }
 
     @Override
@@ -328,7 +336,10 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
         mNameEditText.setText(mLuxuryItemEditPresenter.getItemName());
         mPriceEditText.setText(String.valueOf(mLuxuryItemEditPresenter.getPrice()));
         //TODO: Remove default pic
-        Bitmap bitmap = mLuxuryItemEditModel.getItemImage();
+
+        String imgPath = getExternalFilesDir(null) + File.separator + Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                + File.separator + mLuxuryItemEditPresenter.getUniqueID() + "." + Config.DEFAULT_IMAGE_EXTENSION;
+        Bitmap bitmap = BitmapFactory.decodeFile(imgPath);
         if (bitmap == null) {
             bitmap = Util.decodeSampledBitmapFromResource(getResources(), R.drawable.b777, 0, 600);
         }
@@ -444,59 +455,28 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
     public void choosePhotoFromGallary() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
         startActivityForResult(galleryIntent, GALLERY);
     }
 
     private void takePhotoFromCamera() {
+        String path = getExternalFilesDir(null) + File.separator +
+                Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                + File.separator + Config.DEFAULT_IMAGE_NAME;
+        //Uri outputURI = Uri.fromFile(new File(path));
+        Uri outputURI = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(path));
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputURI);
         startActivityForResult(intent, CAMERA);
         //TODO: This will not grab full size picture
         // https://stackoverflow.com/questions/3442462/how-to-capture-an-image-and-store-it-with-the-native-android-camera
     }
 
     private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(LuxuryItemEditActivity.this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActivity.this,
-                    Manifest.permission.CAMERA)) {
-                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this, new String[]{Manifest.permission.CAMERA},
-                        REQUEST_CAMERA);
-            }
-            else {
-                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this,
-                        new String[]{Manifest.permission.CAMERA},
-                        REQUEST_CAMERA);
-            }
-        }
-
-        if (ContextCompat.checkSelfPermission(LuxuryItemEditActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActivity.this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_READEXT);
-            }
-            else {
-                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        REQUEST_READEXT);
-            }
-        }
-
-        if (ContextCompat.checkSelfPermission(LuxuryItemEditActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LuxuryItemEditActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_WRITEEXT);
-            }
-            else {
-                ActivityCompat.requestPermissions(LuxuryItemEditActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_WRITEEXT);
-            }
-        }
+        Util.requestPermission(this, Manifest.permission.CAMERA, REQUEST_CAMERA);
+        Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_READEXT);
+        Util.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_WRITEEXT);
     }
 
     @Override
@@ -515,17 +495,54 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
                     //mItemImage.setImageBitmap(Util.downScaleBitmap(mOriginSizeItemImage, 0, 600));
                     mItemImage.setImageBitmap(mOriginSizeItemImage);
 
+                    String defPicPath = getExternalFilesDir(null) + File.separator +
+                            Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                            + File.separator + Config.DEFAULT_IMAGE_NAME;
+                    File defPic = new File(defPicPath);
+                    if (defPic.exists()) {
+                        defPic.delete();
+                    }
+
+                    try (FileOutputStream out = new FileOutputStream(defPic)) {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    
+                    mIsUpdateImage = true;
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(LuxuryItemEditActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
-        } else if (requestCode == CAMERA) {
+        }
+        else if (requestCode == CAMERA) {
+            /*
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             mOriginSizeItemImage = thumbnail;
             mItemImage.setImageBitmap(Util.downScaleBitmap(mOriginSizeItemImage, 0, 600));
-            Toast.makeText(LuxuryItemEditActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
+            */
+            if (resultCode == Activity.RESULT_OK) {
+                //Glide.with(this).load(imageFilePath).into(mImageView);
+                String path = getExternalFilesDir(null) + File.separator +
+                        Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
+                        + File.separator + Config.DEFAULT_IMAGE_NAME;
+                Uri contentURI = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(path));
+                Bitmap bitmap = null;
+                try {
+                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI));
+                    mOriginSizeItemImage = Util.downScaleBitmap(bitmap, 0, 200);
+                    mItemImage.setImageBitmap(mOriginSizeItemImage);
+                    mIsUpdateImage = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(resultCode == Activity.RESULT_CANCELED) {
+                // User Cancelled the action
+            }
+
         }
         //saveData();
     }

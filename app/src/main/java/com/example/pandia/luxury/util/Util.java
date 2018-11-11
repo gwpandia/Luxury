@@ -1,16 +1,35 @@
 package com.example.pandia.luxury.util;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+
+import com.example.pandia.luxury.activities.LuxuryItemEditActivity;
+import com.example.pandia.luxury.configs.Config;
+import com.example.pandia.luxury.constants.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -259,5 +278,72 @@ public class Util {
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         return calculateInSampleSize(options.outWidth, options.outHeight, reqWidth, reqHeight);
+    }
+
+    public static String getDirectory(Constants.DirectoryType type) {
+        String path = "";
+        path += Config.ROOT_DIR_NAME;
+        path += File.separator;
+
+        switch (type) {
+            case LUXURY_IMAGE:
+                path += Config.LUXURY_ITEM_IMAGE_DIR_NAME;
+                break;
+            case DATABASE:
+                path += Config.DATABASE_DIR_NAME;
+                break;
+            default:
+                return "";
+        }
+        return path;
+    }
+
+    public static void initExternalStorageStructure(Context context, String packageName) {
+        String path = context.getExternalFilesDir(null) + File.separator;
+        path += Config.ROOT_DIR_NAME;
+        //Uri uri = FileProvider.getUriForFile(context, packageName, new File(path));
+        //File rootDir = new File(uri.getPath());
+        File rootDir = new File(path);
+
+        if (!rootDir.exists()) {
+            rootDir.mkdir();
+        }
+
+        for (String subDir : Config.ALL_SUB_DIRS) {
+            File sub = new File(path, subDir);
+            if (!sub.exists()) {
+                sub.mkdir();
+            }
+        }
+    }
+
+    public static void requestPermission(Activity activity, String permission, int requestCode) {
+        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity , permission)) {
+                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+            }
+            else {
+                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+            }
+        }
+    }
+
+    public static void copy(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        try {
+            OutputStream out = new FileOutputStream(dst);
+            try {
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            } finally {
+                out.close();
+            }
+        } finally {
+            in.close();
+        }
     }
 }

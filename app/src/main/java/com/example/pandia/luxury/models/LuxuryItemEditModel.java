@@ -33,6 +33,8 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
     }
 
     private static final String TASK_PARAM_NAME_UNIQUEID = "uniqueID";
+    private static final String TASK_PARAM_NAME_UPDATEIMG = "updateImg";
+    private static final String TASK_PARAM_NAME_CONTENT_ROOT_PATH = "contentPath";
 
     //TODO: add IO type parameter ?
     public static LuxuryItemEditModel createLuxuryItemDetailModel(Context context, Constants.DataIO ioType, ILuxuryItemEditPresenter presenter, String uniqueID) {
@@ -184,7 +186,7 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
     }
 
     @Override
-    public void saveLuxuryItem() {
+    public void saveLuxuryItem(boolean updateImage, String contentRootPath) {
         if (mDBAsyncTask != null) {
             return;
         }
@@ -193,6 +195,8 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
         mLuxuryItem.updateUniqueID();
         mDBAsyncTask = new LuxuryItemEditModel.LuxuryItemEditModelTask();
         TaskParameters<LuxuryItemEditModel.TaskType> parameters = new TaskParameters<LuxuryItemEditModel.TaskType>(TaskType.SAVE_LUXURY_ITEM);
+        parameters.addParameter(TASK_PARAM_NAME_UPDATEIMG, Boolean.toString(updateImage));
+        parameters.addParameter(TASK_PARAM_NAME_CONTENT_ROOT_PATH, contentRootPath);
         mDBAsyncTask.execute(parameters);
     }
 
@@ -334,7 +338,9 @@ public class LuxuryItemEditModel implements ILuxuryItemEditModel {
                     }
                     break;
                 case SAVE_LUXURY_ITEM:
-                    LuxuryItemIO.writeLuxuryData(mLuxuryItem, mLuxuryWriter);
+                    boolean updateImg = Boolean.valueOf(taskTypes[0].getParamter(TASK_PARAM_NAME_UPDATEIMG));
+                    String contentRootPath = taskTypes[0].getParamter(TASK_PARAM_NAME_CONTENT_ROOT_PATH);
+                    LuxuryItemIO.writeLuxuryData(mLuxuryItem, contentRootPath, updateImg, mLuxuryWriter);
                     mNotifyDoneSaving = true;
                     ret = true;
                     break;

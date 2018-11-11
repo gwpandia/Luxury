@@ -5,4 +5,9 @@ public class Constants {
         FILE,
         SQLITE
     }
+
+    public enum DirectoryType {
+        LUXURY_IMAGE,
+        DATABASE
+    }
 }
