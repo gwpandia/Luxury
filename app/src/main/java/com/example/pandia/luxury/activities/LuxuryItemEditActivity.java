@@ -339,7 +339,7 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
 
         String imgPath = getExternalFilesDir(null) + File.separator + Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
                 + File.separator + mLuxuryItemEditPresenter.getUniqueID() + "." + Config.DEFAULT_IMAGE_EXTENSION;
-        Bitmap bitmap = BitmapFactory.decodeFile(imgPath);
+        Bitmap bitmap = Util.getRotatedBitmap(BitmapFactory.decodeFile(imgPath), imgPath);
         if (bitmap == null) {
             bitmap = Util.decodeSampledBitmapFromResource(getResources(), R.drawable.b777, 0, 600);
         }
@@ -531,7 +531,9 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
                 Uri contentURI = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(path));
                 Bitmap bitmap = null;
                 try {
-                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI));
+                    // TODO: Fix here
+                    String path = getContentResolver().openInputStream(contentURI).toString();
+                    bitmap = Util.getRotatedBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI)), path);
                     mOriginSizeItemImage = Util.downScaleBitmap(bitmap, 0, 200);
                     mItemImage.setImageBitmap(mOriginSizeItemImage);
                     mIsUpdateImage = true;

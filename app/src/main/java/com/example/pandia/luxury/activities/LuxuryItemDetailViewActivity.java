@@ -105,7 +105,7 @@ public class LuxuryItemDetailViewActivity extends AppCompatActivity implements I
 
         String imgPath = getExternalFilesDir(null) + File.separator + Util.getDirectory(Constants.DirectoryType.LUXURY_IMAGE)
                 + File.separator + mItemPresenter.getUniqueID() + "." + Config.DEFAULT_IMAGE_EXTENSION;
-        Bitmap bitmap = BitmapFactory.decodeFile(imgPath);
+        Bitmap bitmap = Util.getRotatedBitmap(BitmapFactory.decodeFile(imgPath), imgPath);
 
         if (bitmap == null) {
             mTopImageView.setImageBitmap(
