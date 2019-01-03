@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton mViewButton;
     private ImageButton mBorrowButton;
     private ImageButton mRestoreButton;
+    private ImageButton mSummaryButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
         mRestoreButton = findViewById(R.id.MainActivity_RestoreButton);
         mRestoreButton.setOnClickListener((View v) -> {
             Intent intent = new Intent(MainActivity.this, LuxuryItemDetailViewActivity.class);
+            MainActivity.this.startActivity(intent);
+        });
+
+        mSummaryButton = findViewById(R.id.MainActivity_SummaryButton);
+        mSummaryButton.setOnClickListener((View v) -> {
+            Intent intent = new Intent(MainActivity.this, LuxuryNFCActivity.class);
             MainActivity.this.startActivity(intent);
         });
     }

@@ -532,8 +532,8 @@ public class LuxuryItemEditActivity extends AppCompatActivity implements ILuxury
                 Bitmap bitmap = null;
                 try {
                     // TODO: Fix here
-                    String path = getContentResolver().openInputStream(contentURI).toString();
-                    bitmap = Util.getRotatedBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI)), path);
+                    String path2 = getContentResolver().openInputStream(contentURI).toString();
+                    bitmap = Util.getRotatedBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(contentURI)), path2);
                     mOriginSizeItemImage = Util.downScaleBitmap(bitmap, 0, 200);
                     mItemImage.setImageBitmap(mOriginSizeItemImage);
                     mIsUpdateImage = true;
